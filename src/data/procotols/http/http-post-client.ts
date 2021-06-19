@@ -1,5 +1,6 @@
-export type HttpPostParams = { url: string; body?: object };
+import { HttpResponse } from './http-reponse';
 
+export type HttpPostParams = { url: string; body?: object };
 export interface HttpPostClient {
-  post(params: HttpPostParams): Promise<void>;
+  post(params: HttpPostParams): Promise<HttpResponse>;
 }
