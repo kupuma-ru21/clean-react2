@@ -1,7 +1,7 @@
 import {
   HttpPostClient,
   HttpPostParams,
-} from '../procotols/http/http-post-client';
+} from '@/data/procotols/http/http-post-client';
 
 export class HttpPostClientSpy implements HttpPostClient {
   url?: string;
