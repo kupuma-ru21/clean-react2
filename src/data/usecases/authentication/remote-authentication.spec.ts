@@ -1,5 +1,7 @@
 import { mockAuthentication } from '@/domain/test/mock-authentication';
 import { HttpPostClientSpy } from '@/data/test/mock-http-client';
+import { InvaildCredentialsError } from '@/domain/errors/invalid-credentionals-error';
+import { HttpStatusCode } from '@/data/procotols/http/http-reponse';
 import { RemoteAuthentication } from './remote-authentication';
 import faker from 'faker';
 
@@ -23,10 +25,16 @@ describe('RemoteAuthentication', () => {
   });
 
   test('Should call HttpPostClient with correct body', async () => {
-    const url = faker.internet.url();
-    const { sut, httpPostClientSpy } = makeSut(url);
+    const { sut, httpPostClientSpy } = makeSut();
     const authenticationParams = mockAuthentication();
     await sut.auth(authenticationParams);
     expect(httpPostClientSpy.body).toEqual(authenticationParams);
+  });
+
+  test('Should throw InvalidCredintionalsError if HttpPostClient returns 401', async () => {
+    const { sut, httpPostClientSpy } = makeSut();
+    httpPostClientSpy.response = { statusCode: HttpStatusCode.unauthorized };
+    const promise = sut.auth(mockAuthentication());
+    await expect(promise).rejects.toThrow(new InvaildCredentialsError());
   });
 });
