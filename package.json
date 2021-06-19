@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "git-commit-msg-linter": "^3.2.6",
     "husky": "^6.0.0",
     "lint-staged": "^11.0.0"
   }
