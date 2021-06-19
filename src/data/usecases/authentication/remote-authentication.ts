@@ -1,5 +1,5 @@
 import { AuthenticationParams } from 'domain/usecases/authentication';
-import { HttpPostClient } from '../../http/procotols/http-post-client';
+import { HttpPostClient } from '../../procotols/http/http-post-client';
 
 export class RemoteAuthentication {
   constructor(readonly url: string, readonly httpPostClient: HttpPostClient) {}
