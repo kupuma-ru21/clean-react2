@@ -7,6 +7,7 @@
     "@typescript-eslint/consistent-type-definitions": "off",
     "@typescript-eslint/strict-boolean-expressions": "off",
     "comma-dangle": "off",
-    "semi": "off"
+    "semi": "off",
+    "@typescript-eslint/camelcase": "off"
   }
 }
