@@ -1,13 +1,9 @@
-import { InvaildCredentialsError } from '@/domain/errors/invalid-credentionals-error';
-import {
-  mockAccountModel,
-  mockAuthentication,
-} from '@/domain/test/mock-account';
-import { AuthenticationParams } from '@/domain/usecases/authentication';
-import { UnexpectedError } from '@/domain/errors/unexpected-error';
-import { AccountModel } from '@/domain/models/account-model';
-import { HttpStatusCode } from '@/data/procotols/http/http-reponse';
-import { HttpPostClientSpy } from '@/data/test/mock-http-client';
+import { InvaildCredentialsError, UnexpectedError } from '@/domain/errors';
+import { mockAccountModel, mockAuthentication } from '@/domain/test';
+import { AuthenticationParams } from '@/domain/usecases';
+import { AccountModel } from '@/domain/models';
+import { HttpStatusCode } from '@/data/procotols/http';
+import { HttpPostClientSpy } from '@/data/test';
 import { RemoteAuthentication } from './remote-authentication';
 import faker from 'faker';
 
