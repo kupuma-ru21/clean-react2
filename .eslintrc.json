@@ -3,9 +3,10 @@
   "extends": [
     "standard-with-typescript",
     "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
     "prettier"
   ],
-  "plugins": ["react"],
+  "plugins": ["react", "react-hooks"],
   "parserOptions": {
     "project": "./tsconfig.json"
   },
