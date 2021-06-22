@@ -17,10 +17,10 @@ const Input: React.VFC<Props> = (props: Props) => {
     []
   );
   const getStatus = useMemo((): string => {
-    return '🔴';
-  }, []);
+    return error ? '🔴' : '🔵';
+  }, [error]);
   const getTitle = useMemo((): string => {
-    return error;
+    return error || '認証に成功';
   }, [error]);
   const handleChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
