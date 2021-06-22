@@ -8,14 +8,19 @@ import {
 } from '@/presentation/components';
 import Context from '@/presentation/context/form/form-context';
 
-type StateProps = { isLoading: boolean; errorMessage: string };
-
 const Login: React.FC = () => {
-  const [state] = useState<StateProps>({ isLoading: false, errorMessage: '' });
+  const [state] = useState({
+    isLoading: false,
+  });
+  const [errorState] = useState({
+    email: '必須項目です',
+    password: '必須項目です',
+    main: '',
+  });
   return (
     <div className={Styles.login}>
       <LoginHeader />
-      <Context.Provider value={state}>
+      <Context.Provider value={{ state, errorState }}>
         <form className={Styles.form}>
           <h2>Login</h2>
 
