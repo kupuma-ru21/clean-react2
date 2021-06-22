@@ -21,14 +21,14 @@ const Input: React.VFC<Props> = (props: Props) => {
   }, []);
   const getTitle = useMemo((): string => {
     return error;
-  }, []);
+  }, [error]);
   const handleChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setState((oldState) => {
         return { ...oldState, [event.target.name]: event.target.value };
       });
     },
-    []
+    [setState]
   );
 
   return (

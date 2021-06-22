@@ -23,10 +23,10 @@ const Login: React.VFC<Props> = ({ validation }: Props) => {
 
   useEffect(() => {
     validation.validate('email', state.email);
-  }, [state.email]);
+  }, [state.email, validation]);
   useEffect(() => {
     validation.validate('password', state.password);
-  }, [state.password]);
+  }, [state.password, validation]);
 
   return (
     <div className={Styles.login}>
