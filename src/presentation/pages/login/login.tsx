@@ -16,14 +16,20 @@ const Login: React.VFC<Props> = ({ validation }: Props) => {
     isLoading: false,
     email: '',
     password: '',
-    emailError: '必須項目です',
+    emailError: '',
     passwordError: '必須項目です',
     mainError: '',
   });
 
   useEffect(() => {
-    validation.validate('email', state.email);
+    setState((oldState) => {
+      return {
+        ...oldState,
+        emailError: validation.validate('email', state.email),
+      };
+    });
   }, [state.email, validation]);
+
   useEffect(() => {
     validation.validate('password', state.password);
   }, [state.password, validation]);
