@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import Styles from './input-styles.scss';
 
 type Props = React.DetailedHTMLProps<
@@ -7,9 +7,15 @@ type Props = React.DetailedHTMLProps<
 >;
 
 const Input: React.VFC<Props> = (props: Props) => {
+  const enableInput = useCallback(
+    (event: React.FocusEvent<HTMLInputElement>): void => {
+      event.target.readOnly = false;
+    },
+    []
+  );
   return (
     <div className={Styles.inputWrap}>
-      <input {...props} />
+      <input {...props} readOnly onFocus={enableInput} />
       <span className={Styles.status}>🔴</span>
     </div>
   );
