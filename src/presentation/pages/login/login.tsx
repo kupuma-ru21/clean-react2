@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Styles from './login-styles.scss';
 import {
   LoginHeader,
@@ -7,20 +7,27 @@ import {
   FormStatus,
 } from '@/presentation/components';
 import Context from '@/presentation/context/form/form-context';
+import { Validation } from '@/presentation/procotols/validation';
 
-const Login: React.FC = () => {
-  const [state] = useState({
+type Props = { validation: Validation };
+
+const Login: React.VFC<Props> = ({ validation }: Props) => {
+  const [state, setState] = useState({
     isLoading: false,
+    email: '',
+    emailError: '必須項目です',
+    passwordError: '必須項目です',
+    mainError: '',
   });
-  const [errorState] = useState({
-    email: '必須項目です',
-    password: '必須項目です',
-    main: '',
-  });
+
+  useEffect(() => {
+    validation.validate({ email: state.email });
+  }, [state.email]);
+
   return (
     <div className={Styles.login}>
       <LoginHeader />
-      <Context.Provider value={{ state, errorState }}>
+      <Context.Provider value={{ state, setState }}>
         <form className={Styles.form}>
           <h2>Login</h2>
 

@@ -8,8 +8,8 @@ type Props = React.DetailedHTMLProps<
 >;
 
 const Input: React.VFC<Props> = (props: Props) => {
-  const { errorState } = useContext(Context);
-  const error = errorState[props.name];
+  const { state, setState } = useContext(Context);
+  const error = state[`${props.name}Error`];
   const enableInput = useCallback(
     (event: React.FocusEvent<HTMLInputElement>): void => {
       event.target.readOnly = false;
@@ -22,10 +22,24 @@ const Input: React.VFC<Props> = (props: Props) => {
   const getTitle = useMemo((): string => {
     return error;
   }, []);
+  const handleChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setState((oldState) => {
+        return { ...oldState, [event.target.name]: event.target.value };
+      });
+    },
+    []
+  );
 
   return (
     <div className={Styles.inputWrap}>
-      <input {...props} readOnly onFocus={enableInput} />
+      <input
+        data-testid={props.name}
+        {...props}
+        readOnly
+        onFocus={enableInput}
+        onChange={handleChange}
+      />
       <span
         data-testid={`${props.name}-status`}
         title={getTitle}
