@@ -31,7 +31,12 @@ const Login: React.VFC<Props> = ({ validation }: Props) => {
   }, [state.email, validation]);
 
   useEffect(() => {
-    validation.validate('password', state.password);
+    setState((oldState) => {
+      return {
+        ...oldState,
+        passwordError: validation.validate('password', state.password),
+      };
+    });
   }, [state.password, validation]);
 
   return (

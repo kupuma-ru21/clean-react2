@@ -1,6 +1,6 @@
 import { Validation } from '@/presentation/procotols/validation';
 
-export class ValidationSpy implements Validation {
+export class ValidationStub implements Validation {
   errorMessage: string;
   fieldName: string;
   fieldValue: string;
