@@ -43,8 +43,9 @@ const Login: React.VFC<Props> = ({ validation, authentication }: Props) => {
   const handleSubmit = useCallback(
     async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
       event.preventDefault();
-      const { isLoading } = state;
-      if (isLoading) return;
+      const { isLoading, emailError, passwordError } = state;
+      if (isLoading || emailError || passwordError) return;
+
       setState((oldState) => ({ ...oldState, isLoading: true }));
       const { email, password } = state;
       await authentication.auth({ email, password });
@@ -56,7 +57,11 @@ const Login: React.VFC<Props> = ({ validation, authentication }: Props) => {
     <div className={Styles.login}>
       <LoginHeader />
       <Context.Provider value={{ state, setState }}>
-        <form className={Styles.form} onSubmit={handleSubmit}>
+        <form
+          className={Styles.form}
+          onSubmit={handleSubmit}
+          data-testid="form"
+        >
           <h2>Login</h2>
 
           <Input type="email" name="email" placeholder="Digite seu e-mail" />
