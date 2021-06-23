@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import Styles from './login-styles.scss';
+import { Authentication } from '@/domain/usecases';
 import {
   LoginHeader,
   Footer,
@@ -8,10 +8,11 @@ import {
 } from '@/presentation/components';
 import Context from '@/presentation/context/form/form-context';
 import { Validation } from '@/presentation/procotols/validation';
+import Styles from './login-styles.scss';
 
-type Props = { validation: Validation };
+type Props = { validation: Validation; authentication: Authentication };
 
-const Login: React.VFC<Props> = ({ validation }: Props) => {
+const Login: React.VFC<Props> = ({ validation, authentication }: Props) => {
   const [state, setState] = useState({
     isLoading: false,
     email: '',
@@ -40,11 +41,12 @@ const Login: React.VFC<Props> = ({ validation }: Props) => {
   }, [state.password, validation]);
 
   const handleSubmit = useCallback(
-    (event: React.FormEvent<HTMLFormElement>): void => {
+    async(event: React.FormEvent<HTMLFormElement>): Promise<void> => {
       event.preventDefault();
       setState((oldState) => ({ ...oldState, isLoading: true }));
+      await authentication.auth({email: state.email, password: state.password})
     },
-    []
+    [authentication, state.email, state.password]
   );
 
   return (
