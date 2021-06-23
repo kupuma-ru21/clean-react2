@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Authentication } from '@/domain/usecases';
 import {
   LoginHeader,
@@ -14,6 +14,7 @@ import Styles from './login-styles.scss';
 type Props = { validation: Validation; authentication: Authentication };
 
 const Login: React.VFC<Props> = ({ validation, authentication }: Props) => {
+  const history = useHistory();
   const [state, setState] = useState({
     isLoading: false,
     email: '',
@@ -52,6 +53,7 @@ const Login: React.VFC<Props> = ({ validation, authentication }: Props) => {
         const { email, password } = state;
         const { accessToken } = await authentication.auth({ email, password });
         localStorage.setItem('accessToken', accessToken);
+        history.replace('/');
       } catch (error) {
         setState((oldState) => ({
           ...oldState,
@@ -60,7 +62,7 @@ const Login: React.VFC<Props> = ({ validation, authentication }: Props) => {
         }));
       }
     },
-    [authentication, state]
+    [authentication, history, state]
   );
 
   return (
