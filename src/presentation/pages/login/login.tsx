@@ -43,13 +43,13 @@ const Login: React.VFC<Props> = ({ validation, authentication }: Props) => {
   const handleSubmit = useCallback(
     async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
       event.preventDefault();
+      const { isLoading } = state;
+      if (isLoading) return;
       setState((oldState) => ({ ...oldState, isLoading: true }));
-      await authentication.auth({
-        email: state.email,
-        password: state.password,
-      });
+      const { email, password } = state;
+      await authentication.auth({ email, password });
     },
-    [authentication, state.email, state.password]
+    [authentication, state]
   );
 
   return (
