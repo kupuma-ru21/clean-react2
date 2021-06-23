@@ -49,7 +49,8 @@ const Login: React.VFC<Props> = ({ validation, authentication }: Props) => {
 
         setState((oldState) => ({ ...oldState, isLoading: true }));
         const { email, password } = state;
-        await authentication.auth({ email, password });
+        const { accessToken } = await authentication.auth({ email, password });
+        localStorage.setItem('accessToken', accessToken);
       } catch (error) {
         setState((oldState) => ({
           ...oldState,
