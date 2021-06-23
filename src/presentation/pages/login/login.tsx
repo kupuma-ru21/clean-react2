@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import { Authentication } from '@/domain/usecases';
 import {
   LoginHeader,
@@ -88,7 +89,9 @@ const Login: React.VFC<Props> = ({ validation, authentication }: Props) => {
           >
             Entar
           </button>
-          <span className={Styles.link}>criar conta</span>
+          <Link data-testid="signup" to="/signup" className={Styles.link}>
+            criar conta
+          </Link>
           <FormStatus />
         </form>
       </Context.Provider>
