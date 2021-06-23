@@ -24,8 +24,8 @@ describe('Login Component', () => {
     const errorWrap = sut.getByTestId('error-wrap');
     expect(errorWrap.childElementCount).toBe(0);
 
-    const submit = sut.getByTestId('submit') as HTMLButtonElement;
-    expect(submit.disabled).toBe(true);
+    const submitButton = sut.getByTestId('submit') as HTMLButtonElement;
+    expect(submitButton.disabled).toBe(true);
 
     const emailStatus = sut.getByTestId('email-status');
     expect(emailStatus.title).toBe(validationStub.errorMessage);
@@ -109,7 +109,24 @@ describe('Login Component', () => {
     fireEvent.input(passwordInput, {
       target: { value: faker.internet.password() },
     });
-    const submit = sut.getByTestId('submit') as HTMLButtonElement;
-    expect(submit.disabled).toBe(false);
+    const submitButton = sut.getByTestId('submit') as HTMLButtonElement;
+    expect(submitButton.disabled).toBe(false);
+  });
+
+  test('Should submit button if form is valid', () => {
+    const { sut, validationStub } = makeSut();
+    validationStub.errorMessage = null;
+    const emailInput = sut.getByTestId('email');
+    fireEvent.input(emailInput, {
+      target: { value: faker.internet.email() },
+    });
+    const passwordInput = sut.getByTestId('password');
+    fireEvent.input(passwordInput, {
+      target: { value: faker.internet.password() },
+    });
+    const submitButton = sut.getByTestId('submit');
+    fireEvent.click(submitButton);
+    const spinner = sut.getByTestId('spinner');
+    expect(spinner).toBeTruthy();
   });
 });
