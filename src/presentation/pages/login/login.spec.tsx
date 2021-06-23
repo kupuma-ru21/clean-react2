@@ -6,6 +6,7 @@ import {
   fireEvent,
   cleanup,
 } from '@testing-library/react';
+import 'jest-localstorage-mock';
 import { InvaildCredentialsError } from '@/domain/errors';
 import { ValidationStub, AuthenticationSpy } from '@/presentation/test';
 import Login from './login';
@@ -64,6 +65,9 @@ const simulateStatusForField = (
 
 describe('Login Component', () => {
   afterEach(cleanup);
+  beforeEach(() => {
+    localStorage.clear();
+  });
   test('Should start with initial state', () => {
     const { sut, validationStub } = makeSut();
     const errorWrap = sut.getByTestId('error-wrap');
@@ -171,5 +175,17 @@ describe('Login Component', () => {
     expect(errorWrap.childElementCount).toBe(1);
     const mainError = sut.getByTestId('main-error');
     expect(mainError.textContent).toBe(error.message);
+  });
+
+  test('Should add accessToken to localstorage on success', async () => {
+    const { sut, validationStub, authenticationSpy } = makeSut();
+    validationStub.errorMessage = null;
+    simulateValidSubmit(sut);
+    await sut.findByTestId('form');
+    const { accessToken } = authenticationSpy.account;
+    expect(localStorage.setItem).toHaveBeenCalledWith(
+      'accessToken',
+      accessToken
+    );
   });
 });
