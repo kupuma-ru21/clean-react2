@@ -39,6 +39,7 @@ const populateEmailField = (
   const emailInput = sut.getByTestId('email');
   fireEvent.input(emailInput, { target: { value: email } });
 };
+
 const populatePasswordField = (
   sut: RenderResult,
   password = faker.internet.password()
@@ -46,6 +47,7 @@ const populatePasswordField = (
   const passwordInput = sut.getByTestId('password');
   fireEvent.input(passwordInput, { target: { value: password } });
 };
+
 const simulateValidSubmit = (
   sut: RenderResult,
   email = faker.internet.email(),
@@ -53,11 +55,11 @@ const simulateValidSubmit = (
 ): void => {
   populateEmailField(sut, email);
   populatePasswordField(sut, password);
-  const submitButton = sut.getByTestId('submit');
-  fireEvent.click(submitButton);
+  const form = sut.getByTestId('form');
+  fireEvent.submit(form);
 };
 
-const simulateStatusForField = (
+const testStatusForField = (
   sut: RenderResult,
   fieldName: string,
   validationStub: ValidationStub
@@ -69,21 +71,48 @@ const simulateStatusForField = (
   expect(textContent).toBe(errorMessage ? '🔴' : '🔵');
 };
 
+const testErrorWrapChildCount = async (
+  sut: RenderResult,
+  count: number
+): Promise<void> => {
+  const errorWrap = await sut.findByTestId('error-wrap');
+  expect(errorWrap.childElementCount).toBe(count);
+};
+
+const testElementExists = (sut: RenderResult, fieldName: string): void => {
+  const el = sut.getByTestId(fieldName);
+  expect(el).toBeTruthy();
+};
+
+const testElementText = (
+  sut: RenderResult,
+  fieldName: string,
+  text: string
+): void => {
+  const el = sut.getByTestId(fieldName);
+  expect(el.textContent).toBe(text);
+};
+
+const testButtonDisabled = (
+  sut: RenderResult,
+  fieldName: string,
+  isDisabled: boolean
+): void => {
+  const submitButton = sut.getByTestId(fieldName) as HTMLButtonElement;
+  expect(submitButton.disabled).toBe(isDisabled);
+};
+
 describe('Login Component', () => {
   afterEach(cleanup);
   beforeEach(() => {
     localStorage.clear();
   });
-  test('Should start with initial state', () => {
+  test('Should start with initial state', async () => {
     const { sut, validationStub } = makeSut();
-    const errorWrap = sut.getByTestId('error-wrap');
-    expect(errorWrap.childElementCount).toBe(0);
-
-    const submitButton = sut.getByTestId('submit') as HTMLButtonElement;
-    expect(submitButton.disabled).toBe(true);
-
-    simulateStatusForField(sut, 'email', validationStub);
-    simulateStatusForField(sut, 'password', validationStub);
+    await testErrorWrapChildCount(sut, 0);
+    testButtonDisabled(sut, 'submit', true);
+    testStatusForField(sut, 'email', validationStub);
+    testStatusForField(sut, 'password', validationStub);
   });
 
   test('Should call Validatiion with correct email', () => {
@@ -105,27 +134,27 @@ describe('Login Component', () => {
   test('Should show email error if Validation fails', () => {
     const { sut, validationStub } = makeSut();
     populateEmailField(sut);
-    simulateStatusForField(sut, 'email', validationStub);
+    testStatusForField(sut, 'email', validationStub);
   });
 
   test('Should show password error if Validation fails', () => {
     const { sut, validationStub } = makeSut();
     populatePasswordField(sut);
-    simulateStatusForField(sut, 'password', validationStub);
+    testStatusForField(sut, 'password', validationStub);
   });
 
   test('Should show valid email state if Validation succeeds', () => {
     const { sut, validationStub } = makeSut();
     validationStub.errorMessage = null;
     populateEmailField(sut);
-    simulateStatusForField(sut, 'email', validationStub);
+    testStatusForField(sut, 'email', validationStub);
   });
 
   test('Should show valid password state if Validation succeeds', () => {
     const { sut, validationStub } = makeSut();
     validationStub.errorMessage = null;
     populatePasswordField(sut);
-    simulateStatusForField(sut, 'password', validationStub);
+    testStatusForField(sut, 'password', validationStub);
   });
 
   test('Should submit button if form is valid', () => {
@@ -133,16 +162,14 @@ describe('Login Component', () => {
     validationStub.errorMessage = null;
     populateEmailField(sut);
     populatePasswordField(sut);
-    const submitButton = sut.getByTestId('submit') as HTMLButtonElement;
-    expect(submitButton.disabled).toBe(false);
+    testButtonDisabled(sut, 'submit', false);
   });
 
   test('Should submit button if form is valid', () => {
     const { sut, validationStub } = makeSut();
     validationStub.errorMessage = null;
     simulateValidSubmit(sut);
-    const spinner = sut.getByTestId('spinner');
-    expect(spinner).toBeTruthy();
+    testElementExists(sut, 'spinner');
   });
 
   test('Should call Authentication with correct values', () => {
@@ -177,10 +204,8 @@ describe('Login Component', () => {
       .spyOn(authenticationSpy, 'auth')
       .mockReturnValueOnce(Promise.reject(error));
     simulateValidSubmit(sut);
-    const errorWrap = await sut.findByTestId('error-wrap');
-    expect(errorWrap.childElementCount).toBe(1);
-    const mainError = sut.getByTestId('main-error');
-    expect(mainError.textContent).toBe(error.message);
+    await testErrorWrapChildCount(sut, 1);
+    testElementText(sut, 'main-error', error.message);
   });
 
   test('Should add accessToken to localstorage on success', async () => {
