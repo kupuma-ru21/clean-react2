@@ -6,6 +6,7 @@ import {
   fireEvent,
   cleanup,
 } from '@testing-library/react';
+import { InvaildCredentialsError } from '@/domain/errors';
 import { ValidationStub, AuthenticationSpy } from '@/presentation/test';
 import Login from './login';
 
@@ -156,5 +157,19 @@ describe('Login Component', () => {
     populateEmailField(sut);
     fireEvent.submit(sut.getByTestId('form'));
     expect(authenticationSpy.callsCount).toBe(0);
+  });
+
+  test('Should present error if Authentication fails', async () => {
+    const { sut, authenticationSpy, validationStub } = makeSut();
+    validationStub.errorMessage = null;
+    const error = new InvaildCredentialsError();
+    jest
+      .spyOn(authenticationSpy, 'auth')
+      .mockReturnValueOnce(Promise.reject(error));
+    simulateValidSubmit(sut);
+    const errorWrap = await sut.findByTestId('error-wrap');
+    expect(errorWrap.childElementCount).toBe(1);
+    const mainError = sut.getByTestId('main-error');
+    expect(mainError.textContent).toBe(error.message);
   });
 });
