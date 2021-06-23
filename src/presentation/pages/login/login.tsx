@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Styles from './login-styles.scss';
 import {
   LoginHeader,
@@ -39,11 +39,16 @@ const Login: React.VFC<Props> = ({ validation }: Props) => {
     });
   }, [state.password, validation]);
 
+  const handleSubmit =useCallback((event: React.FormEvent<HTMLFormElement>): void => {
+    event.preventDefault()
+    setState((oldState) => ({...oldState, isLoading: true}))
+  }, [])
+
   return (
     <div className={Styles.login}>
       <LoginHeader />
       <Context.Provider value={{ state, setState }}>
-        <form className={Styles.form}>
+        <form className={Styles.form} onSubmit={handleSubmit}>
           <h2>Login</h2>
 
           <Input type="email" name="email" placeholder="Digite seu e-mail" />
