@@ -39,10 +39,13 @@ const Login: React.VFC<Props> = ({ validation }: Props) => {
     });
   }, [state.password, validation]);
 
-  const handleSubmit =useCallback((event: React.FormEvent<HTMLFormElement>): void => {
-    event.preventDefault()
-    setState((oldState) => ({...oldState, isLoading: true}))
-  }, [])
+  const handleSubmit = useCallback(
+    (event: React.FormEvent<HTMLFormElement>): void => {
+      event.preventDefault();
+      setState((oldState) => ({ ...oldState, isLoading: true }));
+    },
+    []
+  );
 
   return (
     <div className={Styles.login}>
