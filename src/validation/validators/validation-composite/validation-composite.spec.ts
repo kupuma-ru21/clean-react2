@@ -11,7 +11,7 @@ const makeSut = (fieldName: string): SutTyeps => {
   const fieldValidationSpy = new FieldValidationSpy(fieldName);
   const fieldValidationSpy2 = new FieldValidationSpy(fieldName);
   const fieldalidationsSpy = [fieldValidationSpy, fieldValidationSpy2];
-  const sut = new ValidationComposite(fieldalidationsSpy);
+  const sut = ValidationComposite.build(fieldalidationsSpy);
 
   return { sut, fieldalidationsSpy };
 };
