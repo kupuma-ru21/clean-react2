@@ -1,7 +1,7 @@
 import { InvaildCredentialsError, UnexpectedError } from '@/domain/errors';
 import { mockAccountModel, mockAuthentication } from '@/domain/test';
-import { AuthenticationParams } from '@/domain/usecases/authentication';
-import { AccountModel } from '@/domain/models/account-model';
+import { AuthenticationParams } from '@/domain/usecases';
+import { AccountModel } from '@/domain/models/';
 import { HttpStatusCode } from '@/data/procotols/http';
 import { HttpPostClientSpy } from '@/data/test';
 import { RemoteAuthentication } from './remote-authentication';

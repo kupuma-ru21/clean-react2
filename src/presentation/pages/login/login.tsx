@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { Authentication } from '@/domain/usecases/authentication';
+import { Authentication } from '@/domain/usecases';
 import {
   LoginHeader,
   Footer,
