@@ -2,5 +2,5 @@ language: node_js
 node_js:
   - 14
 script:
-  - npm run lint:fix
-  - npm run test
+  - npm run lint:check
+  - npm run test:coveralls
