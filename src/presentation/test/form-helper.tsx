@@ -1,4 +1,5 @@
-import { RenderResult } from '@testing-library/react';
+import { fireEvent, RenderResult } from '@testing-library/react';
+import faker from 'faker';
 import { ValidationStub } from './mock-validation';
 
 export const testButtonDisabled = (
@@ -20,4 +21,13 @@ export const testStatusForField = (
   const { errorMessage } = validationStub;
   expect(title).toBe(errorMessage || '認証に成功');
   expect(textContent).toBe(errorMessage ? '🔴' : '🔵');
+};
+
+export const populateField = (
+  sut: RenderResult,
+  fieldName: string,
+  value = faker.random.word()
+): void => {
+  const input = sut.getByTestId(fieldName);
+  fireEvent.input(input, { target: { value } });
 };

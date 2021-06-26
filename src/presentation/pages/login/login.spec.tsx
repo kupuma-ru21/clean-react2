@@ -42,29 +42,13 @@ const makeSut = (): SutTypes => {
   return { sut, validationStub, authenticationSpy, saveAccessTokenMock };
 };
 
-const populateEmailField = (
-  sut: RenderResult,
-  email = faker.internet.email()
-): void => {
-  const emailInput = sut.getByTestId('email');
-  fireEvent.input(emailInput, { target: { value: email } });
-};
-
-const populatePasswordField = (
-  sut: RenderResult,
-  password = faker.internet.password()
-): void => {
-  const passwordInput = sut.getByTestId('password');
-  fireEvent.input(passwordInput, { target: { value: password } });
-};
-
 const simulateValidSubmit = (
   sut: RenderResult,
   email = faker.internet.email(),
   password = faker.internet.password()
 ): void => {
-  populateEmailField(sut, email);
-  populatePasswordField(sut, password);
+  Helper.populateField(sut, 'email', email);
+  Helper.populateField(sut, 'password', password);
   const form = sut.getByTestId('form');
   fireEvent.submit(form);
 };
@@ -103,14 +87,14 @@ describe('Login Component', () => {
 
   test('Should show email error if Validation fails', () => {
     const { sut, validationStub } = makeSut();
-    populateEmailField(sut);
+    Helper.populateField(sut, 'email');
     Helper.testStatusForField(sut, 'email', validationStub);
   });
 
   test('Should call Validatiion with correct email', () => {
     const { sut, validationStub } = makeSut();
     const email = faker.internet.email();
-    populateEmailField(sut, email);
+    Helper.populateField(sut, 'email', email);
     expect(validationStub.fieldName).toBe('email');
     expect(validationStub.fieldValue).toBe(email);
   });
@@ -118,36 +102,36 @@ describe('Login Component', () => {
   test('Should call Validatiion with correct password', () => {
     const { sut, validationStub } = makeSut();
     const password = faker.internet.password();
-    populatePasswordField(sut, password);
+    Helper.populateField(sut, 'password', password);
     expect(validationStub.fieldName).toBe('password');
     expect(validationStub.fieldValue).toBe(password);
   });
 
   test('Should show password error if Validation fails', () => {
     const { sut, validationStub } = makeSut();
-    populatePasswordField(sut);
+    Helper.populateField(sut, 'password');
     Helper.testStatusForField(sut, 'password', validationStub);
   });
 
   test('Should show valid email state if Validation succeeds', () => {
     const { sut, validationStub } = makeSut();
     validationStub.errorMessage = null;
-    populateEmailField(sut);
+    Helper.populateField(sut, 'email');
     Helper.testStatusForField(sut, 'email', validationStub);
   });
 
   test('Should show valid password state if Validation succeeds', () => {
     const { sut, validationStub } = makeSut();
     validationStub.errorMessage = null;
-    populatePasswordField(sut);
+    Helper.populateField(sut, 'password');
     Helper.testStatusForField(sut, 'password', validationStub);
   });
 
   test('Should submit button if form is valid', () => {
     const { sut, validationStub } = makeSut();
     validationStub.errorMessage = null;
-    populateEmailField(sut);
-    populatePasswordField(sut);
+    Helper.populateField(sut, 'email');
+    Helper.populateField(sut, 'password');
     Helper.testButtonDisabled(sut, 'submit', false);
   });
 
@@ -177,7 +161,7 @@ describe('Login Component', () => {
 
   test('Should call Authentication if form is invalid', () => {
     const { sut, authenticationSpy } = makeSut();
-    populateEmailField(sut);
+    Helper.populateField(sut, 'email');
     fireEvent.submit(sut.getByTestId('form'));
     expect(authenticationSpy.callsCount).toBe(0);
   });
