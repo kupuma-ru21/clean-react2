@@ -1,5 +1,5 @@
 import { Authentication } from '@/domain/usecases';
-import { RemoteAuthentication } from '@/data/usecases/remote-authentication';
+import { RemoteAuthentication } from '@/data/usecases/authentication/remote-authentication';
 import { makeAxiosHttpClient } from '@/main/factories/http/axios-http-client-factory';
 import { makeApiUrl } from '@/main/factories/http/api-url-factory';
 
