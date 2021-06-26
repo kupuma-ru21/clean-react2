@@ -20,7 +20,7 @@ export class RemoteAddAccount implements AddAccount {
         return null;
       case HttpStatusCode.forbidden:
         throw new EmainInUseError();
-      case HttpStatusCode.badRequest:
+      default:
         throw new UnexpectedError();
     }
   }
