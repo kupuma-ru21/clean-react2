@@ -13,6 +13,7 @@ import {
   ValidationStub,
   AuthenticationSpy,
   SaveAccessTokenMock,
+  Helper,
 } from '@/presentation/test';
 import { Login } from '@/presentation/pages';
 
@@ -68,26 +69,6 @@ const simulateValidSubmit = (
   fireEvent.submit(form);
 };
 
-const testStatusForField = (
-  sut: RenderResult,
-  fieldName: string,
-  validationStub: ValidationStub
-): void => {
-  const status = sut.getByTestId(`${fieldName}-status`);
-  const { title, textContent } = status;
-  const { errorMessage } = validationStub;
-  expect(title).toBe(errorMessage || '認証に成功');
-  expect(textContent).toBe(errorMessage ? '🔴' : '🔵');
-};
-
-const testErrorWrapChildCount = async (
-  sut: RenderResult,
-  count: number
-): Promise<void> => {
-  const errorWrap = await sut.findByTestId('error-wrap');
-  expect(errorWrap.childElementCount).toBe(count);
-};
-
 const testElementExists = (sut: RenderResult, fieldName: string): void => {
   const el = sut.getByTestId(fieldName);
   expect(el).toBeTruthy();
@@ -102,13 +83,12 @@ const testElementText = (
   expect(el.textContent).toBe(text);
 };
 
-const testButtonDisabled = (
+const testErrorWrapChildCount = async (
   sut: RenderResult,
-  fieldName: string,
-  isDisabled: boolean
-): void => {
-  const submitButton = sut.getByTestId(fieldName) as HTMLButtonElement;
-  expect(submitButton.disabled).toBe(isDisabled);
+  count: number
+): Promise<void> => {
+  const errorWrap = await sut.findByTestId('error-wrap');
+  expect(errorWrap.childElementCount).toBe(count);
 };
 
 describe('Login Component', () => {
@@ -116,9 +96,9 @@ describe('Login Component', () => {
   test('Should start with initial state', async () => {
     const { sut, validationStub } = makeSut();
     await testErrorWrapChildCount(sut, 0);
-    testButtonDisabled(sut, 'submit', true);
-    testStatusForField(sut, 'email', validationStub);
-    testStatusForField(sut, 'password', validationStub);
+    Helper.testButtonDisabled(sut, 'submit', true);
+    Helper.testStatusForField(sut, 'email', validationStub);
+    Helper.testStatusForField(sut, 'password', validationStub);
   });
 
   test('Should call Validatiion with correct email', () => {
@@ -140,27 +120,27 @@ describe('Login Component', () => {
   test('Should show email error if Validation fails', () => {
     const { sut, validationStub } = makeSut();
     populateEmailField(sut);
-    testStatusForField(sut, 'email', validationStub);
+    Helper.testStatusForField(sut, 'email', validationStub);
   });
 
   test('Should show password error if Validation fails', () => {
     const { sut, validationStub } = makeSut();
     populatePasswordField(sut);
-    testStatusForField(sut, 'password', validationStub);
+    Helper.testStatusForField(sut, 'password', validationStub);
   });
 
   test('Should show valid email state if Validation succeeds', () => {
     const { sut, validationStub } = makeSut();
     validationStub.errorMessage = null;
     populateEmailField(sut);
-    testStatusForField(sut, 'email', validationStub);
+    Helper.testStatusForField(sut, 'email', validationStub);
   });
 
   test('Should show valid password state if Validation succeeds', () => {
     const { sut, validationStub } = makeSut();
     validationStub.errorMessage = null;
     populatePasswordField(sut);
-    testStatusForField(sut, 'password', validationStub);
+    Helper.testStatusForField(sut, 'password', validationStub);
   });
 
   test('Should submit button if form is valid', () => {
@@ -168,7 +148,7 @@ describe('Login Component', () => {
     validationStub.errorMessage = null;
     populateEmailField(sut);
     populatePasswordField(sut);
-    testButtonDisabled(sut, 'submit', false);
+    Helper.testButtonDisabled(sut, 'submit', false);
   });
 
   test('Should submit button if form is valid', () => {
