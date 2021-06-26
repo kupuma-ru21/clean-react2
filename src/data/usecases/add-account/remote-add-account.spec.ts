@@ -2,7 +2,7 @@ import faker from 'faker';
 import { mockAddAccountParams } from '@/domain/test';
 import { AddAccountParams } from '@/domain/usecases';
 import { AccountModel } from '@/domain/models/';
-import { EmainInUseError } from '@/domain/errors';
+import { EmainInUseError, UnexpectedError } from '@/domain/errors';
 import { HttpPostClientSpy } from '@/data/test';
 import { HttpStatusCode } from '@/data/procotols/http';
 import { RemoteAddAccount } from './remote-add-account';
@@ -41,5 +41,12 @@ describe('RemoteAddAccount', () => {
     httpPostClientSpy.response = { statusCode: HttpStatusCode.forbidden };
     const promise = sut.add(mockAddAccountParams());
     await expect(promise).rejects.toThrow(new EmainInUseError());
+  });
+
+  test('Should throw UnexpectedError if HttpPostClient returns 400', async () => {
+    const { sut, httpPostClientSpy } = makeSut();
+    httpPostClientSpy.response = { statusCode: HttpStatusCode.badRequest };
+    const promise = sut.add(mockAddAccountParams());
+    await expect(promise).rejects.toThrow(new UnexpectedError());
   });
 });
