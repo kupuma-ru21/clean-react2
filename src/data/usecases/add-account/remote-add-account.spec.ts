@@ -2,7 +2,9 @@ import faker from 'faker';
 import { mockAddAccountParams } from '@/domain/test';
 import { AddAccountParams } from '@/domain/usecases';
 import { AccountModel } from '@/domain/models/';
+import { EmainInUseError } from '@/domain/errors';
 import { HttpPostClientSpy } from '@/data/test';
+import { HttpStatusCode } from '@/data/procotols/http';
 import { RemoteAddAccount } from './remote-add-account';
 
 type SutType = {
@@ -32,5 +34,12 @@ describe('RemoteAddAccount', () => {
     const addAccountParams = mockAddAccountParams();
     await sut.add(addAccountParams);
     expect(httpPostClientSpy.body).toEqual(addAccountParams);
+  });
+
+  test('Should throw EmainInUseError if HttpPostClient returns 403', async () => {
+    const { sut, httpPostClientSpy } = makeSut();
+    httpPostClientSpy.response = { statusCode: HttpStatusCode.forbidden };
+    const promise = sut.add(mockAddAccountParams());
+    await expect(promise).rejects.toThrow(new EmainInUseError());
   });
 });
