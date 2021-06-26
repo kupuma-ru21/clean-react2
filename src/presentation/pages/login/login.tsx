@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { Authentication } from '@/domain/usecases';
+import { Authentication, SaveAccessToken } from '@/domain/usecases';
 import {
   LoginHeader,
   Footer,
@@ -11,9 +11,17 @@ import Context from '@/presentation/context/form/form-context';
 import { Validation } from '@/presentation/procotols/validation';
 import Styles from './login-styles.scss';
 
-type Props = { validation: Validation; authentication: Authentication };
+type Props = {
+  validation: Validation;
+  authentication: Authentication;
+  saveAccessToken: SaveAccessToken;
+};
 
-const Login: React.VFC<Props> = ({ validation, authentication }: Props) => {
+const Login: React.VFC<Props> = ({
+  validation,
+  authentication,
+  saveAccessToken,
+}: Props) => {
   const history = useHistory();
   const [state, setState] = useState({
     isLoading: false,
@@ -52,7 +60,7 @@ const Login: React.VFC<Props> = ({ validation, authentication }: Props) => {
         setState((oldState) => ({ ...oldState, isLoading: true }));
         const { email, password } = state;
         const { accessToken } = await authentication.auth({ email, password });
-        localStorage.setItem('accessToken', accessToken);
+        await saveAccessToken.save(accessToken);
         history.replace('/');
       } catch (error) {
         setState((oldState) => ({
@@ -62,7 +70,7 @@ const Login: React.VFC<Props> = ({ validation, authentication }: Props) => {
         }));
       }
     },
-    [authentication, history, state]
+    [authentication, history, saveAccessToken, state]
   );
 
   return (
