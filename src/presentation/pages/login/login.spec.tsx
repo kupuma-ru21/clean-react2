@@ -101,6 +101,12 @@ describe('Login Component', () => {
     Helper.testStatusForField(sut, 'password', validationStub);
   });
 
+  test('Should show email error if Validation fails', () => {
+    const { sut, validationStub } = makeSut();
+    populateEmailField(sut);
+    Helper.testStatusForField(sut, 'email', validationStub);
+  });
+
   test('Should call Validatiion with correct email', () => {
     const { sut, validationStub } = makeSut();
     const email = faker.internet.email();
@@ -115,12 +121,6 @@ describe('Login Component', () => {
     populatePasswordField(sut, password);
     expect(validationStub.fieldName).toBe('password');
     expect(validationStub.fieldValue).toBe(password);
-  });
-
-  test('Should show email error if Validation fails', () => {
-    const { sut, validationStub } = makeSut();
-    populateEmailField(sut);
-    Helper.testStatusForField(sut, 'email', validationStub);
   });
 
   test('Should show password error if Validation fails', () => {
