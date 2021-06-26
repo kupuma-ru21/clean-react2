@@ -1,6 +1,6 @@
 import { AddAccount, AddAccountParams } from '@/domain/usecases';
 import { AccountModel } from '@/domain/models';
-import { EmainInUseError } from '@/domain/errors';
+import { EmainInUseError, UnexpectedError } from '@/domain/errors';
 import { HttpPostClient, HttpStatusCode } from '@/data/procotols/http';
 
 export class RemoteAddAccount implements AddAccount {
@@ -16,10 +16,12 @@ export class RemoteAddAccount implements AddAccount {
     });
 
     switch (httpResponse.statusCode) {
+      case HttpStatusCode.ok:
+        return null;
       case HttpStatusCode.forbidden:
         throw new EmainInUseError();
-      default:
-        return null;
+      case HttpStatusCode.badRequest:
+        throw new UnexpectedError();
     }
   }
 }
