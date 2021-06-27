@@ -7,6 +7,7 @@ import SignUp from './signup';
 type SutTypes = { sut: RenderResult; validationStub: ValidationStub };
 const makeSut = (): SutTypes => {
   const validationStub = new ValidationStub();
+  validationStub.errorMessage = faker.random.words();
   const sut = render(<SignUp validation={validationStub} />);
   return { sut, validationStub };
 };

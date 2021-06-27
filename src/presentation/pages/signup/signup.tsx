@@ -30,21 +30,36 @@ const SignUp: React.VFC<Props> = ({ validation }: Props) => {
       return {
         ...oldState,
         nameError: validation.validate('name', state.name),
+      };
+    });
+  }, [state.name, validation]);
+  useEffect(() => {
+    setState((oldState) => {
+      return {
+        ...oldState,
         emailError: validation.validate('email', state.email),
+      };
+    });
+  }, [state.email, validation]);
+  useEffect(() => {
+    setState((oldState) => {
+      return {
+        ...oldState,
         passwordError: validation.validate('password', state.password),
+      };
+    });
+  }, [state.password, validation]);
+  useEffect(() => {
+    setState((oldState) => {
+      return {
+        ...oldState,
         passwordConfirmationError: validation.validate(
           'passwordConfirmation',
           state.passwordConfirmation
         ),
       };
     });
-  }, [
-    state.email,
-    state.name,
-    state.password,
-    state.passwordConfirmation,
-    validation,
-  ]);
+  }, [state.passwordConfirmation, validation]);
 
   return (
     <div className={Styles.signup}>
