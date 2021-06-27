@@ -113,7 +113,7 @@ describe('Login Component', () => {
     Helper.testButtonDisabled(sut, 'submit', false);
   });
 
-  test('Should submit button if form is valid', () => {
+  test('Should show spinner on submit', () => {
     const { sut, validationStub } = makeSut();
     validationStub.errorMessage = null;
     simulateValidSubmit(sut);
