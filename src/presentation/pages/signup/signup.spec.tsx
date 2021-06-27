@@ -28,8 +28,8 @@ describe('SignUp Component', () => {
     testChildCount(sut, 'error-wrap', 0);
     Helper.testButtonDisabled(sut, 'submit', true);
     Helper.testStatusForField(sut, 'name', validationStub);
-    validationStub.errorMessage = 'error';
     Helper.testStatusForField(sut, 'email', validationStub);
+    validationStub.errorMessage = 'error';
     Helper.testStatusForField(sut, 'password', validationStub);
     Helper.testStatusForField(sut, 'passwordConfirmation', validationStub);
   });
@@ -39,5 +39,12 @@ describe('SignUp Component', () => {
     validationStub.errorMessage = faker.random.words();
     Helper.populateField(sut, 'name');
     Helper.testStatusForField(sut, 'name', validationStub);
+  });
+
+  test('Should show email error if Validation fails', () => {
+    const { sut, validationStub } = makeSut();
+    validationStub.errorMessage = faker.random.words();
+    Helper.populateField(sut, 'email');
+    Helper.testStatusForField(sut, 'email', validationStub);
   });
 });
