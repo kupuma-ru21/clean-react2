@@ -87,7 +87,12 @@ const SignUp: React.VFC<Props> = ({ validation }: Props) => {
 
           <button
             className={Styles.submit}
-            disabled
+            disabled={
+              !!state.nameError ||
+              !!state.emailError ||
+              !!state.passwordError ||
+              !!state.passwordConfirmationError
+            }
             type="submit"
             data-testid="submit"
           >
