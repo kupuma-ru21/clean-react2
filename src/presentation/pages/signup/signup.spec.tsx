@@ -89,4 +89,14 @@ describe('SignUp Component', () => {
     Helper.populateField(sut, 'passwordConfirmation');
     Helper.testStatusForField(sut, 'passwordConfirmation', validationStub);
   });
+
+  test('Should submit button if form is valid', () => {
+    const { sut, validationStub } = makeSut();
+    validationStub.errorMessage = null;
+    Helper.populateField(sut, 'name');
+    Helper.populateField(sut, 'email');
+    Helper.populateField(sut, 'password');
+    Helper.populateField(sut, 'passwordConfirmation');
+    Helper.testButtonDisabled(sut, 'submit', false);
+  });
 });
