@@ -146,4 +146,12 @@ describe('SignUp Component', () => {
       passwordConfirmation: password,
     });
   });
+
+  test('Should call AddAccount only once', () => {
+    const { sut, validationStub, addAccountSpy } = makeSut();
+    validationStub.errorMessage = null;
+    simulateValidSubmit(sut);
+    simulateValidSubmit(sut);
+    expect(addAccountSpy.callsCount).toBe(1);
+  });
 });
