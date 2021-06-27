@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   LoginHeader,
   Footer,
@@ -60,12 +60,23 @@ const SignUp: React.VFC<Props> = ({ validation }: Props) => {
       };
     });
   }, [state.passwordConfirmation, validation]);
+  const handleSubmit = useCallback(
+    async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
+      event.preventDefault();
+      setState((oldState) => ({ ...oldState, isLoading: true }));
+    },
+    []
+  );
 
   return (
     <div className={Styles.signup}>
       <LoginHeader />
       <Context.Provider value={{ state, setState }}>
-        <form className={Styles.form}>
+        <form
+          className={Styles.form}
+          onSubmit={handleSubmit}
+          data-testid="form"
+        >
           <h2>アカウントを作成する</h2>
 
           <Input type="text" name="name" placeholder="名前を入力してください" />
