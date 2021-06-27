@@ -6,15 +6,22 @@ import {
   fireEvent,
 } from '@testing-library/react';
 import faker from 'faker';
-import { ValidationStub, Helper } from '@/presentation/test';
+import { ValidationStub, Helper, AddAccountSpy } from '@/presentation/test';
 import SignUp from './signup';
 
-type SutTypes = { sut: RenderResult; validationStub: ValidationStub };
+type SutTypes = {
+  sut: RenderResult;
+  validationStub: ValidationStub;
+  addAccountSpy: AddAccountSpy;
+};
 const makeSut = (): SutTypes => {
+  const addAccountSpy = new AddAccountSpy();
   const validationStub = new ValidationStub();
   validationStub.errorMessage = faker.random.words();
-  const sut = render(<SignUp validation={validationStub} />);
-  return { sut, validationStub };
+  const sut = render(
+    <SignUp addAccount={addAccountSpy} validation={validationStub} />
+  );
+  return { sut, validationStub, addAccountSpy };
 };
 
 const testChildCount = (
@@ -123,5 +130,20 @@ describe('SignUp Component', () => {
     validationStub.errorMessage = null;
     simulateValidSubmit(sut);
     Helper.testElementExists(sut, 'spinner');
+  });
+
+  test('Should call AddAccount with correct values', () => {
+    const { sut, validationStub, addAccountSpy } = makeSut();
+    validationStub.errorMessage = null;
+    const name = faker.name.firstName();
+    const email = faker.internet.email();
+    const password = faker.internet.password();
+    simulateValidSubmit(sut, name, email, password);
+    expect(addAccountSpy.params).toEqual({
+      name,
+      email,
+      password,
+      passwordConfirmation: password,
+    });
   });
 });
