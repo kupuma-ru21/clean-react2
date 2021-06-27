@@ -38,10 +38,6 @@ const simulateValidSubmit = (
   const form = sut.getByTestId('form');
   fireEvent.submit(form);
 };
-const testElementExists = (sut: RenderResult, fieldName: string): void => {
-  const el = sut.getByTestId(fieldName);
-  expect(el).toBeTruthy();
-};
 
 describe('SignUp Component', () => {
   afterEach(cleanup);
@@ -126,6 +122,6 @@ describe('SignUp Component', () => {
     const { sut, validationStub } = makeSut();
     validationStub.errorMessage = null;
     simulateValidSubmit(sut);
-    testElementExists(sut, 'spinner');
+    Helper.testElementExists(sut, 'spinner');
   });
 });

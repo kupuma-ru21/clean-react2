@@ -53,11 +53,6 @@ const simulateValidSubmit = (
   fireEvent.submit(form);
 };
 
-const testElementExists = (sut: RenderResult, fieldName: string): void => {
-  const el = sut.getByTestId(fieldName);
-  expect(el).toBeTruthy();
-};
-
 const testElementText = (
   sut: RenderResult,
   fieldName: string,
@@ -117,7 +112,7 @@ describe('Login Component', () => {
     const { sut, validationStub } = makeSut();
     validationStub.errorMessage = null;
     simulateValidSubmit(sut);
-    testElementExists(sut, 'spinner');
+    Helper.testElementExists(sut, 'spinner');
   });
 
   test('Should call Authentication with correct values', () => {
