@@ -91,28 +91,6 @@ describe('Login Component', () => {
     Helper.testStatusForField(sut, 'email', validationStub);
   });
 
-  test('Should call Validatiion with correct email', () => {
-    const { sut, validationStub } = makeSut();
-    const email = faker.internet.email();
-    Helper.populateField(sut, 'email', email);
-    expect(validationStub.fieldName).toBe('email');
-    expect(validationStub.fieldValue).toBe(email);
-  });
-
-  test('Should call Validatiion with correct password', () => {
-    const { sut, validationStub } = makeSut();
-    const password = faker.internet.password();
-    Helper.populateField(sut, 'password', password);
-    expect(validationStub.fieldName).toBe('password');
-    expect(validationStub.fieldValue).toBe(password);
-  });
-
-  test('Should show password error if Validation fails', () => {
-    const { sut, validationStub } = makeSut();
-    Helper.populateField(sut, 'password');
-    Helper.testStatusForField(sut, 'password', validationStub);
-  });
-
   test('Should show valid email state if Validation succeeds', () => {
     const { sut, validationStub } = makeSut();
     validationStub.errorMessage = null;
@@ -209,5 +187,27 @@ describe('Login Component', () => {
     fireEvent.click(signup);
     expect(history.length).toBe(2);
     expect(history.location.pathname).toBe('/signup');
+  });
+
+  test('Should call Validatiion with correct email', () => {
+    const { sut, validationStub } = makeSut();
+    const email = faker.internet.email();
+    Helper.populateField(sut, 'email', email);
+    expect(validationStub.fieldName).toBe('email');
+    expect(validationStub.fieldValue).toBe(email);
+  });
+
+  test('Should call Validatiion with correct password', () => {
+    const { sut, validationStub } = makeSut();
+    const password = faker.internet.password();
+    Helper.populateField(sut, 'password', password);
+    expect(validationStub.fieldName).toBe('password');
+    expect(validationStub.fieldValue).toBe(password);
+  });
+
+  test('Should show password error if Validation fails', () => {
+    const { sut, validationStub } = makeSut();
+    Helper.populateField(sut, 'password');
+    Helper.testStatusForField(sut, 'password', validationStub);
   });
 });

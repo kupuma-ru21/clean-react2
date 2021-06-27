@@ -60,4 +60,32 @@ describe('SignUp Component', () => {
     Helper.populateField(sut, 'passwordConfirmation');
     Helper.testStatusForField(sut, 'passwordConfirmation', validationStub);
   });
+
+  test('Should show valid name state if Validation succeeds', () => {
+    const { sut, validationStub } = makeSut();
+    validationStub.errorMessage = null;
+    Helper.populateField(sut, 'name');
+    Helper.testStatusForField(sut, 'name', validationStub);
+  });
+
+  test('Should show valid email state if Validation succeeds', () => {
+    const { sut, validationStub } = makeSut();
+    validationStub.errorMessage = null;
+    Helper.populateField(sut, 'email');
+    Helper.testStatusForField(sut, 'email', validationStub);
+  });
+
+  test('Should show valid password state if Validation succeeds', () => {
+    const { sut, validationStub } = makeSut();
+    validationStub.errorMessage = null;
+    Helper.populateField(sut, 'password');
+    Helper.testStatusForField(sut, 'password', validationStub);
+  });
+
+  test('Should show valid passwordConfirmation state if Validation succeeds', () => {
+    const { sut, validationStub } = makeSut();
+    validationStub.errorMessage = null;
+    Helper.populateField(sut, 'passwordConfirmation');
+    Helper.testStatusForField(sut, 'passwordConfirmation', validationStub);
+  });
 });
