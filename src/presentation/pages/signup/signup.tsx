@@ -16,9 +16,10 @@ const SignUp: React.VFC<Props> = ({ validation }: Props) => {
     isLoading: false,
     name: '',
     email: '',
+    password: '',
     nameError: '',
     emailError: '',
-    passwordError: 'error',
+    passwordError: '',
     passwordConfirmationError: 'error',
     mainError: '',
   });
@@ -29,9 +30,10 @@ const SignUp: React.VFC<Props> = ({ validation }: Props) => {
         ...oldState,
         nameError: validation.validate('name', state.name),
         emailError: validation.validate('email', state.email),
+        passwordError: validation.validate('password', state.password),
       };
     });
-  }, [state.email, state.name, validation]);
+  }, [state.email, state.name, state.password, validation]);
 
   return (
     <div className={Styles.signup}>
