@@ -64,6 +64,8 @@ const SignUp: React.VFC<Props> = ({ validation, addAccount }: Props) => {
   const handleSubmit = useCallback(
     async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
       event.preventDefault();
+      if (state.isLoading) return;
+
       setState((oldState) => ({ ...oldState, isLoading: true }));
       await addAccount.add({
         name: state.name,
@@ -75,6 +77,7 @@ const SignUp: React.VFC<Props> = ({ validation, addAccount }: Props) => {
     [
       addAccount,
       state.email,
+      state.isLoading,
       state.name,
       state.password,
       state.passwordConfirmation,
