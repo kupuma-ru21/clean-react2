@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { AddAccount } from '@/domain/usecases';
 import {
   LoginHeader,
   Footer,
@@ -9,9 +10,9 @@ import { Validation } from '@/presentation/procotols/validation';
 import Context from '@/presentation/context/form/form-context';
 import Styles from './signup-styles.scss';
 
-type Props = { validation: Validation };
+type Props = { validation: Validation; addAccount: AddAccount };
 
-const SignUp: React.VFC<Props> = ({ validation }: Props) => {
+const SignUp: React.VFC<Props> = ({ validation, addAccount }: Props) => {
   const [state, setState] = useState({
     isLoading: false,
     name: '',
@@ -64,8 +65,20 @@ const SignUp: React.VFC<Props> = ({ validation }: Props) => {
     async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
       event.preventDefault();
       setState((oldState) => ({ ...oldState, isLoading: true }));
+      await addAccount.add({
+        name: state.name,
+        email: state.email,
+        password: state.password,
+        passwordConfirmation: state.passwordConfirmation,
+      });
     },
-    []
+    [
+      addAccount,
+      state.email,
+      state.name,
+      state.password,
+      state.passwordConfirmation,
+    ]
   );
 
   return (
