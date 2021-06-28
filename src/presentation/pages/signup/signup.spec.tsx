@@ -212,4 +212,36 @@ describe('SignUp Component', () => {
     expect(history.length).toBe(1);
     expect(history.location.pathname).toBe('/login');
   });
+
+  test('Should call Validatiion with correct name', () => {
+    const { sut, validationStub } = makeSut();
+    const name = faker.name.findName();
+    Helper.populateField(sut, 'name', name);
+    expect(validationStub.fieldName).toBe('name');
+    expect(validationStub.fieldValue).toBe(name);
+  });
+
+  test('Should call Validatiion with correct email', () => {
+    const { sut, validationStub } = makeSut();
+    const email = faker.internet.email();
+    Helper.populateField(sut, 'email', email);
+    expect(validationStub.fieldName).toBe('email');
+    expect(validationStub.fieldValue).toBe(email);
+  });
+
+  test('Should call Validatiion with correct password', () => {
+    const { sut, validationStub } = makeSut();
+    const password = faker.internet.password();
+    Helper.populateField(sut, 'password', password);
+    expect(validationStub.fieldName).toBe('password');
+    expect(validationStub.fieldValue).toBe(password);
+  });
+
+  test('Should call Validatiion with correct passwordConfirmation', () => {
+    const { sut, validationStub } = makeSut();
+    const passwordConfirmation = faker.internet.password();
+    Helper.populateField(sut, 'passwordConfirmation', passwordConfirmation);
+    expect(validationStub.fieldName).toBe('passwordConfirmation');
+    expect(validationStub.fieldValue).toBe(passwordConfirmation);
+  });
 });
