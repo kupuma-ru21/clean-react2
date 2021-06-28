@@ -8,6 +8,7 @@ import {
 import faker from 'faker';
 import { ValidationStub, Helper, AddAccountSpy } from '@/presentation/test';
 import SignUp from './signup';
+import { EmainInUseError } from '@/domain/errors';
 
 type SutTypes = {
   sut: RenderResult;
@@ -44,6 +45,23 @@ const simulateValidSubmit = (
   Helper.populateField(sut, 'passwordConfirmation', password);
   const form = sut.getByTestId('form');
   fireEvent.submit(form);
+};
+
+const testElementText = (
+  sut: RenderResult,
+  fieldName: string,
+  text: string
+): void => {
+  const el = sut.getByTestId(fieldName);
+  expect(el.textContent).toBe(text);
+};
+
+const testErrorWrapChildCount = async (
+  sut: RenderResult,
+  count: number
+): Promise<void> => {
+  const errorWrap = await sut.findByTestId('error-wrap');
+  expect(errorWrap.childElementCount).toBe(count);
 };
 
 describe('SignUp Component', () => {
@@ -160,5 +178,15 @@ describe('SignUp Component', () => {
     Helper.populateField(sut, 'email');
     fireEvent.submit(sut.getByTestId('form'));
     expect(addAccountSpy.callsCount).toBe(0);
+  });
+
+  test('Should present error if AddAccount fails', async () => {
+    const { sut, addAccountSpy, validationStub } = makeSut();
+    validationStub.errorMessage = null;
+    const error = new EmainInUseError();
+    jest.spyOn(addAccountSpy, 'add').mockRejectedValueOnce(error);
+    simulateValidSubmit(sut);
+    await testErrorWrapChildCount(sut, 1);
+    testElementText(sut, 'main-error', error.message);
   });
 });
