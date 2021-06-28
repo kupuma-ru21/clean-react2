@@ -53,15 +53,6 @@ const simulateValidSubmit = (
   fireEvent.submit(form);
 };
 
-const testElementText = (
-  sut: RenderResult,
-  fieldName: string,
-  text: string
-): void => {
-  const el = sut.getByTestId(fieldName);
-  expect(el.textContent).toBe(text);
-};
-
 const testErrorWrapChildCount = async (
   sut: RenderResult,
   count: number
@@ -146,7 +137,7 @@ describe('Login Component', () => {
     jest.spyOn(authenticationSpy, 'auth').mockRejectedValueOnce(error);
     simulateValidSubmit(sut);
     await testErrorWrapChildCount(sut, 1);
-    testElementText(sut, 'main-error', error.message);
+    Helper.testElementText(sut, 'main-error', error.message);
   });
 
   test('Should call SaveAaccessToken on success', async () => {
@@ -171,7 +162,7 @@ describe('Login Component', () => {
       .mockReturnValueOnce(Promise.reject(error));
     simulateValidSubmit(sut);
     await testErrorWrapChildCount(sut, 1);
-    testElementText(sut, 'main-error', error.message);
+    Helper.testElementText(sut, 'main-error', error.message);
   });
 
   test('Should go to signup page', () => {
