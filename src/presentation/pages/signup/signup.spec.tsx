@@ -1,4 +1,6 @@
 import React from 'react';
+import { Router } from 'react-router-dom';
+import { createMemoryHistory } from 'history';
 import {
   RenderResult,
   render,
@@ -6,7 +8,12 @@ import {
   fireEvent,
 } from '@testing-library/react';
 import faker from 'faker';
-import { ValidationStub, Helper, AddAccountSpy } from '@/presentation/test';
+import {
+  ValidationStub,
+  Helper,
+  AddAccountSpy,
+  SaveAccessTokenMock,
+} from '@/presentation/test';
 import SignUp from './signup';
 import { EmainInUseError } from '@/domain/errors';
 
@@ -14,15 +21,25 @@ type SutTypes = {
   sut: RenderResult;
   validationStub: ValidationStub;
   addAccountSpy: AddAccountSpy;
+  saveAccessTokenMock: SaveAccessTokenMock;
 };
+
+const history = createMemoryHistory({ initialEntries: ['/signup'] });
 const makeSut = (): SutTypes => {
   const addAccountSpy = new AddAccountSpy();
+  const saveAccessTokenMock = new SaveAccessTokenMock();
   const validationStub = new ValidationStub();
   validationStub.errorMessage = faker.random.words();
   const sut = render(
-    <SignUp addAccount={addAccountSpy} validation={validationStub} />
+    <Router history={history}>
+      <SignUp
+        addAccount={addAccountSpy}
+        validation={validationStub}
+        saveAccessToken={saveAccessTokenMock}
+      />
+    </Router>
   );
-  return { sut, validationStub, addAccountSpy };
+  return { sut, validationStub, addAccountSpy, saveAccessTokenMock };
 };
 
 const simulateValidSubmit = (
@@ -163,5 +180,18 @@ describe('SignUp Component', () => {
     simulateValidSubmit(sut);
     await Helper.testChildCount(sut, 'error-wrap', 1);
     Helper.testElementText(sut, 'main-error', error.message);
+  });
+
+  test('Should call SaveAaccessToken on success', async () => {
+    const { sut, validationStub, addAccountSpy, saveAccessTokenMock } =
+      makeSut();
+    validationStub.errorMessage = null;
+    simulateValidSubmit(sut);
+    await sut.findByTestId('form');
+    expect(saveAccessTokenMock.accessToken).toBe(
+      addAccountSpy.account.accessToken
+    );
+    expect(history.length).toBe(1);
+    expect(history.location.pathname).toBe('/');
   });
 });
