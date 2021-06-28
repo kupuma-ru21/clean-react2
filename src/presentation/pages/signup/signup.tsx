@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { AddAccount } from '@/domain/usecases';
+import { useHistory } from 'react-router-dom';
+import { AddAccount, SaveAccessToken } from '@/domain/usecases';
 import {
   LoginHeader,
   Footer,
@@ -10,9 +11,17 @@ import { Validation } from '@/presentation/procotols/validation';
 import Context from '@/presentation/context/form/form-context';
 import Styles from './signup-styles.scss';
 
-type Props = { validation: Validation; addAccount: AddAccount };
+type Props = {
+  validation: Validation;
+  addAccount: AddAccount;
+  saveAccessToken: SaveAccessToken;
+};
 
-const SignUp: React.VFC<Props> = ({ validation, addAccount }: Props) => {
+const SignUp: React.VFC<Props> = ({
+  validation,
+  addAccount,
+  saveAccessToken,
+}: Props) => {
   const [state, setState] = useState({
     isLoading: false,
     name: '',
@@ -61,6 +70,8 @@ const SignUp: React.VFC<Props> = ({ validation, addAccount }: Props) => {
       };
     });
   }, [state.passwordConfirmation, validation]);
+
+  const history = useHistory();
   const handleSubmit = useCallback(
     async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
       event.preventDefault();
@@ -83,12 +94,14 @@ const SignUp: React.VFC<Props> = ({ validation, addAccount }: Props) => {
 
         const { name, email, password, passwordConfirmation } = state;
         setState((oldState) => ({ ...oldState, isLoading: true }));
-        await addAccount.add({
+        const { accessToken } = await addAccount.add({
           name,
           email,
           password,
-          passwordConfirmation: passwordConfirmation,
+          passwordConfirmation,
         });
+        await saveAccessToken.save(accessToken);
+        history.replace('/');
       } catch (error) {
         setState((oldState) => ({
           ...oldState,
@@ -97,7 +110,7 @@ const SignUp: React.VFC<Props> = ({ validation, addAccount }: Props) => {
         }));
       }
     },
-    [addAccount, state]
+    [addAccount, history, saveAccessToken, state]
   );
 
   return (
