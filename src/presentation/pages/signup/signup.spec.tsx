@@ -154,4 +154,11 @@ describe('SignUp Component', () => {
     simulateValidSubmit(sut);
     expect(addAccountSpy.callsCount).toBe(1);
   });
+
+  test('Should call AddAcount if form is invalid', () => {
+    const { sut, addAccountSpy } = makeSut();
+    Helper.populateField(sut, 'email');
+    fireEvent.submit(sut.getByTestId('form'));
+    expect(addAccountSpy.callsCount).toBe(0);
+  });
 });
