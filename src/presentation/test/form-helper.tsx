@@ -48,3 +48,12 @@ export const testElementText = (
   const el = sut.getByTestId(fieldName);
   expect(el.textContent).toBe(text);
 };
+
+export const testChildCount = async (
+  sut: RenderResult,
+  fieldName: string,
+  count: number
+): Promise<void> => {
+  const el = await sut.findByTestId(fieldName);
+  expect(el.childElementCount).toBe(count);
+};

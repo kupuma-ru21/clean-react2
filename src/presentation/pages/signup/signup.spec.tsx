@@ -25,14 +25,6 @@ const makeSut = (): SutTypes => {
   return { sut, validationStub, addAccountSpy };
 };
 
-const testChildCount = (
-  sut: RenderResult,
-  fieldName: string,
-  count: number
-): void => {
-  const el = sut.getByTestId(fieldName);
-  expect(el.childElementCount).toBe(count);
-};
 const simulateValidSubmit = (
   sut: RenderResult,
   name = faker.name.findName(),
@@ -47,20 +39,12 @@ const simulateValidSubmit = (
   fireEvent.submit(form);
 };
 
-const testErrorWrapChildCount = async (
-  sut: RenderResult,
-  count: number
-): Promise<void> => {
-  const errorWrap = await sut.findByTestId('error-wrap');
-  expect(errorWrap.childElementCount).toBe(count);
-};
-
 describe('SignUp Component', () => {
   afterEach(cleanup);
 
-  test('Should start with initial state', () => {
+  test('Should start with initial state', async () => {
     const { sut, validationStub } = makeSut();
-    testChildCount(sut, 'error-wrap', 0);
+    await Helper.testChildCount(sut, 'error-wrap', 0);
     Helper.testButtonDisabled(sut, 'submit', true);
     Helper.testStatusForField(sut, 'name', validationStub);
     Helper.testStatusForField(sut, 'email', validationStub);
@@ -177,7 +161,7 @@ describe('SignUp Component', () => {
     const error = new EmainInUseError();
     jest.spyOn(addAccountSpy, 'add').mockRejectedValueOnce(error);
     simulateValidSubmit(sut);
-    await testErrorWrapChildCount(sut, 1);
+    await Helper.testChildCount(sut, 'error-wrap', 1);
     Helper.testElementText(sut, 'main-error', error.message);
   });
 });

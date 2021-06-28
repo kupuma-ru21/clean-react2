@@ -53,19 +53,11 @@ const simulateValidSubmit = (
   fireEvent.submit(form);
 };
 
-const testErrorWrapChildCount = async (
-  sut: RenderResult,
-  count: number
-): Promise<void> => {
-  const errorWrap = await sut.findByTestId('error-wrap');
-  expect(errorWrap.childElementCount).toBe(count);
-};
-
 describe('Login Component', () => {
   afterEach(cleanup);
   test('Should start with initial state', async () => {
     const { sut, validationStub } = makeSut();
-    await testErrorWrapChildCount(sut, 0);
+    await Helper.testChildCount(sut, 'error-wrap', 0);
     Helper.testButtonDisabled(sut, 'submit', true);
     Helper.testStatusForField(sut, 'email', validationStub);
     Helper.testStatusForField(sut, 'password', validationStub);
@@ -136,7 +128,7 @@ describe('Login Component', () => {
     const error = new InvaildCredentialsError();
     jest.spyOn(authenticationSpy, 'auth').mockRejectedValueOnce(error);
     simulateValidSubmit(sut);
-    await testErrorWrapChildCount(sut, 1);
+    await Helper.testChildCount(sut, 'error-wrap', 1);
     Helper.testElementText(sut, 'main-error', error.message);
   });
 
@@ -161,7 +153,7 @@ describe('Login Component', () => {
       .spyOn(saveAccessTokenMock, 'save')
       .mockReturnValueOnce(Promise.reject(error));
     simulateValidSubmit(sut);
-    await testErrorWrapChildCount(sut, 1);
+    await Helper.testChildCount(sut, 'error-wrap', 1);
     Helper.testElementText(sut, 'main-error', error.message);
   });
 
