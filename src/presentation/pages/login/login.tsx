@@ -99,7 +99,7 @@ const Login: React.VFC<Props> = ({
           >
             Entar
           </button>
-          <Link data-testid="signup" to="/signup" className={Styles.link}>
+          <Link data-testid="signup-link" to="/signup" className={Styles.link}>
             criar conta
           </Link>
           <FormStatus />
