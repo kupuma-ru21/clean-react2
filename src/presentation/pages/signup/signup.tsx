@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import { AddAccount, SaveAccessToken } from '@/domain/usecases';
 import {
   LoginHeader,
@@ -154,7 +154,14 @@ const SignUp: React.VFC<Props> = ({
           >
             Entar
           </button>
-          <span className={Styles.link}>ログインに戻る</span>
+          <Link
+            className={Styles.link}
+            data-testid="login-link"
+            replace
+            to="/login"
+          >
+            ログインに戻る
+          </Link>
           <FormStatus />
         </form>
       </Context.Provider>
