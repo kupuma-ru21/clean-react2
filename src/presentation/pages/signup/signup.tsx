@@ -64,29 +64,38 @@ const SignUp: React.VFC<Props> = ({ validation, addAccount }: Props) => {
   const handleSubmit = useCallback(
     async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
       event.preventDefault();
-      const {
-        isLoading,
-        nameError,
-        emailError,
-        passwordError,
-        passwordConfirmationError,
-      } = state;
-      const preventSubmit =
-        isLoading ||
-        nameError ||
-        emailError ||
-        passwordError ||
-        passwordConfirmationError;
-      if (preventSubmit) return;
 
-      const { name, email, password, passwordConfirmation } = state;
-      setState((oldState) => ({ ...oldState, isLoading: true }));
-      await addAccount.add({
-        name,
-        email,
-        password,
-        passwordConfirmation: passwordConfirmation,
-      });
+      try {
+        const {
+          isLoading,
+          nameError,
+          emailError,
+          passwordError,
+          passwordConfirmationError,
+        } = state;
+        const preventSubmit =
+          isLoading ||
+          nameError ||
+          emailError ||
+          passwordError ||
+          passwordConfirmationError;
+        if (preventSubmit) return;
+
+        const { name, email, password, passwordConfirmation } = state;
+        setState((oldState) => ({ ...oldState, isLoading: true }));
+        await addAccount.add({
+          name,
+          email,
+          password,
+          passwordConfirmation: passwordConfirmation,
+        });
+      } catch (error) {
+        setState((oldState) => ({
+          ...oldState,
+          isLoading: false,
+          mainError: error.message,
+        }));
+      }
     },
     [addAccount, state]
   );
