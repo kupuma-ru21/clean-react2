@@ -6,6 +6,7 @@ import {
   Footer,
   Input,
   FormStatus,
+  SubmitButton,
 } from '@/presentation/components';
 import Context from '@/presentation/context/form/form-context';
 import { Validation } from '@/presentation/procotols/validation';
@@ -25,6 +26,7 @@ const Login: React.VFC<Props> = ({
   const history = useHistory();
   const [state, setState] = useState({
     isLoading: false,
+    isFormInvalid: true,
     email: '',
     password: '',
     emailError: '',
@@ -49,13 +51,21 @@ const Login: React.VFC<Props> = ({
       };
     });
   }, [state.password, validation]);
+  useEffect(() => {
+    setState((oldState) => {
+      return {
+        ...oldState,
+        isFormInvalid: !!state.emailError || !!state.passwordError,
+      };
+    });
+  }, [state.emailError, state.passwordError]);
 
   const handleSubmit = useCallback(
     async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
       event.preventDefault();
       try {
-        const { isLoading, emailError, passwordError } = state;
-        if (isLoading || emailError || passwordError) return;
+        const { isLoading, isFormInvalid } = state;
+        if (isLoading || isFormInvalid) return;
 
         setState((oldState) => ({ ...oldState, isLoading: true }));
         const { email, password } = state;
@@ -90,15 +100,7 @@ const Login: React.VFC<Props> = ({
             name="password"
             placeholder="Digite sua senha"
           />
-
-          <button
-            data-testid="submit"
-            disabled={!!state.emailError || !!state.passwordError}
-            className={Styles.submit}
-            type="submit"
-          >
-            Entar
-          </button>
+          <SubmitButton text="ログイン" />
           <Link data-testid="signup-link" to="/signup" className={Styles.link}>
             criar conta
           </Link>

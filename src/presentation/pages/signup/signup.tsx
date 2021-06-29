@@ -6,6 +6,7 @@ import {
   Footer,
   Input,
   FormStatus,
+  SubmitButton,
 } from '@/presentation/components';
 import { Validation } from '@/presentation/procotols/validation';
 import Context from '@/presentation/context/form/form-context';
@@ -24,6 +25,7 @@ const SignUp: React.VFC<Props> = ({
 }: Props) => {
   const [state, setState] = useState({
     isLoading: false,
+    isFormInvalid: true,
     name: '',
     email: '',
     password: '',
@@ -70,6 +72,23 @@ const SignUp: React.VFC<Props> = ({
       };
     });
   }, [state.passwordConfirmation, validation]);
+  useEffect(() => {
+    setState((oldState) => {
+      return {
+        ...oldState,
+        isFormInvalid:
+          !!state.nameError ||
+          !!state.emailError ||
+          !!state.passwordError ||
+          !!state.passwordConfirmationError,
+      };
+    });
+  }, [
+    state.emailError,
+    state.nameError,
+    state.passwordConfirmationError,
+    state.passwordError,
+  ]);
 
   const history = useHistory();
   const handleSubmit = useCallback(
@@ -77,20 +96,8 @@ const SignUp: React.VFC<Props> = ({
       event.preventDefault();
 
       try {
-        const {
-          isLoading,
-          nameError,
-          emailError,
-          passwordError,
-          passwordConfirmationError,
-        } = state;
-        const preventSubmit =
-          isLoading ||
-          nameError ||
-          emailError ||
-          passwordError ||
-          passwordConfirmationError;
-        if (preventSubmit) return;
+        const { isLoading, isFormInvalid } = state;
+        if (isLoading || isFormInvalid) return;
 
         const { name, email, password, passwordConfirmation } = state;
         setState((oldState) => ({ ...oldState, isLoading: true }));
@@ -140,20 +147,7 @@ const SignUp: React.VFC<Props> = ({
             name="passwordConfirmation"
             placeholder="パスワードを再度、入力してください"
           />
-
-          <button
-            className={Styles.submit}
-            disabled={
-              !!state.nameError ||
-              !!state.emailError ||
-              !!state.passwordError ||
-              !!state.passwordConfirmationError
-            }
-            type="submit"
-            data-testid="submit"
-          >
-            Entar
-          </button>
+          <SubmitButton text="登録" />
           <Link
             className={Styles.link}
             data-testid="login-link"
