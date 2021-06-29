@@ -1,6 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { useHistory, Link } from 'react-router-dom';
-import { AddAccount, SaveAccessToken } from '@/domain/usecases';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import {
   LoginHeader,
   Footer,
@@ -8,117 +7,21 @@ import {
   FormStatus,
   SubmitButton,
 } from '@/presentation/components';
-import { Validation } from '@/presentation/procotols/validation';
 import Context from '@/presentation/context/form/form-context';
+import { useSignup } from './useSignup';
+import type { Props } from './useSignup';
 import Styles from './signup-styles.scss';
-
-type Props = {
-  validation: Validation;
-  addAccount: AddAccount;
-  saveAccessToken: SaveAccessToken;
-};
 
 const SignUp: React.VFC<Props> = ({
   validation,
   addAccount,
   saveAccessToken,
 }: Props) => {
-  const [state, setState] = useState({
-    isLoading: false,
-    isFormInvalid: true,
-    name: '',
-    email: '',
-    password: '',
-    passwordConfirmation: '',
-    nameError: '',
-    emailError: '',
-    passwordError: '',
-    passwordConfirmationError: '',
-    mainError: '',
+  const { state, setState, handleSubmit } = useSignup({
+    validation,
+    addAccount,
+    saveAccessToken,
   });
-
-  useEffect(() => {
-    setState((oldState) => {
-      return {
-        ...oldState,
-        nameError: validation.validate('name', state.name),
-      };
-    });
-  }, [state.name, validation]);
-  useEffect(() => {
-    setState((oldState) => {
-      return {
-        ...oldState,
-        emailError: validation.validate('email', state.email),
-      };
-    });
-  }, [state.email, validation]);
-  useEffect(() => {
-    setState((oldState) => {
-      return {
-        ...oldState,
-        passwordError: validation.validate('password', state.password),
-      };
-    });
-  }, [state.password, validation]);
-  useEffect(() => {
-    setState((oldState) => {
-      return {
-        ...oldState,
-        passwordConfirmationError: validation.validate(
-          'passwordConfirmation',
-          state.passwordConfirmation
-        ),
-      };
-    });
-  }, [state.passwordConfirmation, validation]);
-  useEffect(() => {
-    setState((oldState) => {
-      return {
-        ...oldState,
-        isFormInvalid:
-          !!state.nameError ||
-          !!state.emailError ||
-          !!state.passwordError ||
-          !!state.passwordConfirmationError,
-      };
-    });
-  }, [
-    state.emailError,
-    state.nameError,
-    state.passwordConfirmationError,
-    state.passwordError,
-  ]);
-
-  const history = useHistory();
-  const handleSubmit = useCallback(
-    async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
-      event.preventDefault();
-
-      try {
-        const { isLoading, isFormInvalid } = state;
-        if (isLoading || isFormInvalid) return;
-
-        const { name, email, password, passwordConfirmation } = state;
-        setState((oldState) => ({ ...oldState, isLoading: true }));
-        const { accessToken } = await addAccount.add({
-          name,
-          email,
-          password,
-          passwordConfirmation,
-        });
-        await saveAccessToken.save(accessToken);
-        history.replace('/');
-      } catch (error) {
-        setState((oldState) => ({
-          ...oldState,
-          isLoading: false,
-          mainError: error.message,
-        }));
-      }
-    },
-    [addAccount, history, saveAccessToken, state]
-  );
 
   return (
     <div className={Styles.signup}>
