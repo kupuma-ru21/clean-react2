@@ -50,7 +50,7 @@ export const useSignup = ({
     setState((oldState) => {
       return {
         ...oldState,
-        nameError: validation.validate('name', state.name),
+        nameError: validation.validate('name', { name: state.name }),
       };
     });
   }, [state.name, validation]);
@@ -58,7 +58,7 @@ export const useSignup = ({
     setState((oldState) => {
       return {
         ...oldState,
-        emailError: validation.validate('email', state.email),
+        emailError: validation.validate('email', { email: state.email }),
       };
     });
   }, [state.email, validation]);
@@ -66,7 +66,9 @@ export const useSignup = ({
     setState((oldState) => {
       return {
         ...oldState,
-        passwordError: validation.validate('password', state.password),
+        passwordError: validation.validate('password', {
+          password: state.password,
+        }),
       };
     });
   }, [state.password, validation]);
@@ -74,10 +76,9 @@ export const useSignup = ({
     setState((oldState) => {
       return {
         ...oldState,
-        passwordConfirmationError: validation.validate(
-          'passwordConfirmation',
-          state.passwordConfirmation
-        ),
+        passwordConfirmationError: validation.validate('passwordConfirmation', {
+          passwordConfirmation: state.passwordConfirmation,
+        }),
       };
     });
   }, [state.passwordConfirmation, validation]);

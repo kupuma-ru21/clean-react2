@@ -38,7 +38,7 @@ const Login: React.VFC<Props> = ({
     setState((oldState) => {
       return {
         ...oldState,
-        emailError: validation.validate('email', state.email),
+        emailError: validation.validate('email', { email: state.email }),
       };
     });
   }, [state.email, validation]);
@@ -47,7 +47,9 @@ const Login: React.VFC<Props> = ({
     setState((oldState) => {
       return {
         ...oldState,
-        passwordError: validation.validate('password', state.password),
+        passwordError: validation.validate('password', {
+          password: state.password,
+        }),
       };
     });
   }, [state.password, validation]);
