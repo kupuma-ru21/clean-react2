@@ -1,15 +1,14 @@
 import React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import { SignUp } from '@/presentation/pages';
 
-type Props = { makeLogin: React.VFC };
+type Factory = { makeLogin: React.VFC; makeSignUp: React.VFC };
 
-const Router: React.VFC<Props> = ({ makeLogin }: Props) => {
+const Router: React.VFC<Factory> = ({ makeLogin, makeSignUp }: Factory) => {
   return (
     <BrowserRouter>
       <Switch>
         <Route path="/login" exact component={makeLogin} />
-        <Route path="/signup" exact component={SignUp} />
+        <Route path="/signup" exact component={makeSignUp} />
       </Switch>
     </BrowserRouter>
   );
