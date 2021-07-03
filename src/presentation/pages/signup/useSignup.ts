@@ -46,42 +46,33 @@ export const useSignup = ({
     mainError: '',
   });
 
-  useEffect(() => {
-    setState((oldState) => {
-      return {
+  const validate = useCallback(
+    (field: string): void => {
+      const { name, email, password, passwordConfirmation } = state;
+      const formdata = { name, email, password, passwordConfirmation };
+      setState((oldState) => ({
         ...oldState,
-        nameError: validation.validate('name', { name: state.name }),
-      };
-    });
-  }, [state.name, validation]);
+        [`${field}Error`]: validation.validate(field, formdata),
+      }));
+    },
+    [state, validation]
+  );
   useEffect(() => {
-    setState((oldState) => {
-      return {
-        ...oldState,
-        emailError: validation.validate('email', { email: state.email }),
-      };
-    });
-  }, [state.email, validation]);
+    validate('name');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.name]);
   useEffect(() => {
-    setState((oldState) => {
-      return {
-        ...oldState,
-        passwordError: validation.validate('password', {
-          password: state.password,
-        }),
-      };
-    });
-  }, [state.password, validation]);
+    validate('email');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.email]);
   useEffect(() => {
-    setState((oldState) => {
-      return {
-        ...oldState,
-        passwordConfirmationError: validation.validate('passwordConfirmation', {
-          passwordConfirmation: state.passwordConfirmation,
-        }),
-      };
-    });
-  }, [state.passwordConfirmation, validation]);
+    validate('password');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.password]);
+  useEffect(() => {
+    validate('passwordConfirmation');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.passwordConfirmation]);
   useEffect(() => {
     setState((oldState) => {
       return {
