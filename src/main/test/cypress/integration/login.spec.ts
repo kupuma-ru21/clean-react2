@@ -3,7 +3,10 @@ import faker from 'faker';
 const baseUrl: string = Cypress.config().baseUrl;
 
 describe('Login', () => {
-  beforeEach(() => cy.visit('login'));
+  beforeEach(() => {
+    cy.server();
+    cy.visit('login');
+  });
   it('Should load with correct initial state', () => {
     cy.getByTestId('email').should('have.attr', 'readOnly');
     cy.getByTestId('email-status')
@@ -49,40 +52,66 @@ describe('Login', () => {
     cy.getByTestId('error-wrap').should('not.have.descendants');
   });
 
-  it('Should present error if invalid credentionals are provided', () => {
+  it('Should present InvalidCredentialsError on 401', () => {
+    cy.route({
+      method: 'POST',
+      url: /login/,
+      status: 401,
+      response: {
+        error: faker.random.words(),
+      },
+    });
     cy.getByTestId('email').focus().type(faker.internet.email());
     cy.getByTestId('password').focus().type(faker.random.alphaNumeric(5));
 
     cy.getByTestId('submit').click();
-    cy.getByTestId('error-wrap')
-      .getByTestId('spinner')
-      .should('exist')
-      .getByTestId('main-error')
-      .should('not.exist')
-      .getByTestId('spinner')
-      .should('not.exist')
-      .getByTestId('main-error')
-      .should('contain.text', 'Credentials invailds');
+    cy.getByTestId('spinner').should('not.exist');
+    cy.getByTestId('main-error').should('contain.text', 'Credentials invailds');
 
     cy.url().should('eq', `${baseUrl}/login`);
   });
 
-  it('Should present save accessToken if valid cledentials are provided', () => {
-    cy.getByTestId('email').focus().type('mango@gmai.com');
-    cy.getByTestId('password').focus().type('12345');
+  it('Should present UnExpectedError on 400', () => {
+    cy.route({
+      method: 'POST',
+      url: /login/,
+      status: 400,
+      response: {
+        error: faker.random.words(),
+      },
+    });
+    cy.getByTestId('email').focus().type(faker.internet.email());
+    cy.getByTestId('password').focus().type(faker.random.alphaNumeric(5));
 
     cy.getByTestId('submit').click();
-    cy.getByTestId('error-wrap')
-      .getByTestId('spinner')
-      .should('exist')
-      .getByTestId('main-error')
-      .should('not.exist')
-      .getByTestId('spinner')
-      .should('not.exist');
-
-    cy.url().should('eq', `${baseUrl}/`);
-    cy.window().then((window) =>
-      assert.isOk(window.localStorage.getItem('accessToken'))
+    cy.getByTestId('spinner').should('not.exist');
+    cy.getByTestId('main-error').should(
+      'contain.text',
+      'Algo de errado acounteceu. Tente novaente em breve.'
     );
+
+    cy.url().should('eq', `${baseUrl}/login`);
+  });
+
+  it('Should present UnExpectedError if invalid data is returned', () => {
+    cy.route({
+      method: 'POST',
+      url: /login/,
+      status: 200,
+      response: {
+        invalidProperty: faker.datatype.uuid(),
+      },
+    });
+    cy.getByTestId('email').focus().type(faker.internet.email());
+    cy.getByTestId('password').focus().type(faker.random.alphaNumeric(5));
+
+    cy.getByTestId('submit').click();
+    cy.getByTestId('spinner').should('not.exist');
+    cy.getByTestId('main-error').should(
+      'contain.text',
+      'Algo de errado acounteceu. Tente novaente em breve.'
+    );
+
+    cy.url().should('eq', `${baseUrl}/login`);
   });
 });
