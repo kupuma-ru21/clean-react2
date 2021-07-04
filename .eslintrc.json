@@ -4,9 +4,11 @@
     "standard-with-typescript",
     "plugin:react/recommended",
     "plugin:react-hooks/recommended",
+    "plugin:cypress/recommended",
     "prettier"
   ],
-  "plugins": ["react", "react-hooks"],
+  "env": { "cypress/globals": true },
+  "plugins": ["react", "react-hooks", "cypress"],
   "parserOptions": {
     "project": "./tsconfig.json"
   },
