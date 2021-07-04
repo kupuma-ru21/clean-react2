@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useMemo } from 'react';
+import React, { useContext, useRef } from 'react';
 import Styles from './input-styles.scss';
 import Context from '@/presentation/context/form/form-context';
 
@@ -10,24 +10,8 @@ type Props = React.DetailedHTMLProps<
 const Input: React.VFC<Props> = (props: Props) => {
   const { state, setState } = useContext(Context);
   const error = state[`${props.name}Error`];
-  const enableInput = useCallback(
-    (event: React.FocusEvent<HTMLInputElement>): void => {
-      event.target.readOnly = false;
-    },
-    []
-  );
-  const getStatus = useMemo((): string => {
-    return error ? '🔴' : '🔵';
-  }, [error]);
-  const getTitle = useMemo((): string => {
-    return error || '認証に成功';
-  }, [error]);
-  const handleChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setState({ ...state, [event.target.name]: event.target.value });
-    },
-    [setState, state]
-  );
+
+  const inputRef = useRef<HTMLInputElement>(null);
 
   return (
     <div className={Styles.inputWrap}>
@@ -35,15 +19,28 @@ const Input: React.VFC<Props> = (props: Props) => {
         data-testid={props.name}
         {...props}
         readOnly
-        onFocus={enableInput}
-        onChange={handleChange}
+        onFocus={(e) => {
+          e.target.readOnly = false;
+        }}
+        onChange={(e) => {
+          setState({ ...state, [e.target.name]: e.target.value });
+        }}
+        placeholder=" "
+        ref={inputRef}
       />
+      <label
+        onClick={() => {
+          inputRef.current.focus();
+        }}
+      >
+        {props.placeholder}
+      </label>
       <span
         data-testid={`${props.name}-status`}
-        title={getTitle}
+        title={error || '認証に成功'}
         className={Styles.status}
       >
-        {getStatus}
+        {error ? '🔴' : '🔵'}
       </span>
     </div>
   );
