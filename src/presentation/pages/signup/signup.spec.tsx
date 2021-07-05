@@ -99,35 +99,35 @@ describe('SignUp Component', () => {
 
   test('Should show valid name state if Validation succeeds', () => {
     const { sut, validationStub } = makeSut();
-    validationStub.errorMessage = null;
+    validationStub.errorMessage = '';
     Helper.populateField(sut, 'name');
     Helper.testStatusForField(sut, 'name', validationStub);
   });
 
   test('Should show valid email state if Validation succeeds', () => {
     const { sut, validationStub } = makeSut();
-    validationStub.errorMessage = null;
+    validationStub.errorMessage = '';
     Helper.populateField(sut, 'email');
     Helper.testStatusForField(sut, 'email', validationStub);
   });
 
   test('Should show valid password state if Validation succeeds', () => {
     const { sut, validationStub } = makeSut();
-    validationStub.errorMessage = null;
+    validationStub.errorMessage = '';
     Helper.populateField(sut, 'password');
     Helper.testStatusForField(sut, 'password', validationStub);
   });
 
   test('Should show valid passwordConfirmation state if Validation succeeds', () => {
     const { sut, validationStub } = makeSut();
-    validationStub.errorMessage = null;
+    validationStub.errorMessage = '';
     Helper.populateField(sut, 'passwordConfirmation');
     Helper.testStatusForField(sut, 'passwordConfirmation', validationStub);
   });
 
   test('Should submit button if form is valid', () => {
     const { sut, validationStub } = makeSut();
-    validationStub.errorMessage = null;
+    validationStub.errorMessage = '';
     Helper.populateField(sut, 'name');
     Helper.populateField(sut, 'email');
     Helper.populateField(sut, 'password');
@@ -137,14 +137,14 @@ describe('SignUp Component', () => {
 
   test('Should show spinner on submit', () => {
     const { sut, validationStub } = makeSut();
-    validationStub.errorMessage = null;
+    validationStub.errorMessage = '';
     simulateValidSubmit(sut);
     Helper.testElementExists(sut, 'spinner');
   });
 
   test('Should call AddAccount with correct values', () => {
     const { sut, validationStub, addAccountSpy } = makeSut();
-    validationStub.errorMessage = null;
+    validationStub.errorMessage = '';
     const name = faker.name.firstName();
     const email = faker.internet.email();
     const password = faker.internet.password();
@@ -159,7 +159,7 @@ describe('SignUp Component', () => {
 
   test('Should call AddAccount only once', () => {
     const { sut, validationStub, addAccountSpy } = makeSut();
-    validationStub.errorMessage = null;
+    validationStub.errorMessage = '';
     simulateValidSubmit(sut);
     simulateValidSubmit(sut);
     expect(addAccountSpy.callsCount).toBe(1);
@@ -174,7 +174,7 @@ describe('SignUp Component', () => {
 
   test('Should present error if AddAccount fails', async () => {
     const { sut, addAccountSpy, validationStub } = makeSut();
-    validationStub.errorMessage = null;
+    validationStub.errorMessage = '';
     const error = new EmainInUseError();
     jest.spyOn(addAccountSpy, 'add').mockRejectedValueOnce(error);
     simulateValidSubmit(sut);
@@ -185,7 +185,7 @@ describe('SignUp Component', () => {
   test('Should call SaveAaccessToken on success', async () => {
     const { sut, validationStub, addAccountSpy, saveAccessTokenMock } =
       makeSut();
-    validationStub.errorMessage = null;
+    validationStub.errorMessage = '';
     simulateValidSubmit(sut);
     await sut.findByTestId('form');
     expect(saveAccessTokenMock.accessToken).toBe(
@@ -197,7 +197,7 @@ describe('SignUp Component', () => {
 
   test('Should present error if SaveAaccessToken fails', async () => {
     const { sut, validationStub, saveAccessTokenMock } = makeSut();
-    validationStub.errorMessage = null;
+    validationStub.errorMessage = '';
     const error = new EmainInUseError();
     jest.spyOn(saveAccessTokenMock, 'save').mockRejectedValueOnce(error);
     simulateValidSubmit(sut);

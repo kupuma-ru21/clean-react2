@@ -71,21 +71,21 @@ describe('Login Component', () => {
 
   test('Should show valid email state if Validation succeeds', () => {
     const { sut, validationStub } = makeSut();
-    validationStub.errorMessage = null;
+    validationStub.errorMessage = '';
     Helper.populateField(sut, 'email');
     Helper.testStatusForField(sut, 'email', validationStub);
   });
 
   test('Should show valid password state if Validation succeeds', () => {
     const { sut, validationStub } = makeSut();
-    validationStub.errorMessage = null;
+    validationStub.errorMessage = '';
     Helper.populateField(sut, 'password');
     Helper.testStatusForField(sut, 'password', validationStub);
   });
 
   test('Should submit button if form is valid', () => {
     const { sut, validationStub } = makeSut();
-    validationStub.errorMessage = null;
+    validationStub.errorMessage = '';
     Helper.populateField(sut, 'email');
     Helper.populateField(sut, 'password');
     Helper.testButtonDisabled(sut, 'submit', false);
@@ -93,14 +93,14 @@ describe('Login Component', () => {
 
   test('Should show spinner on submit', () => {
     const { sut, validationStub } = makeSut();
-    validationStub.errorMessage = null;
+    validationStub.errorMessage = '';
     simulateValidSubmit(sut);
     Helper.testElementExists(sut, 'spinner');
   });
 
   test('Should call Authentication with correct values', () => {
     const { sut, validationStub, authenticationSpy } = makeSut();
-    validationStub.errorMessage = null;
+    validationStub.errorMessage = '';
     const email = faker.internet.email();
     const password = faker.internet.password();
     simulateValidSubmit(sut, email, password);
@@ -109,7 +109,7 @@ describe('Login Component', () => {
 
   test('Should call Authentication only once', () => {
     const { sut, validationStub, authenticationSpy } = makeSut();
-    validationStub.errorMessage = null;
+    validationStub.errorMessage = '';
     simulateValidSubmit(sut);
     simulateValidSubmit(sut);
     expect(authenticationSpy.callsCount).toBe(1);
@@ -124,7 +124,7 @@ describe('Login Component', () => {
 
   test('Should present error if Authentication fails', async () => {
     const { sut, authenticationSpy, validationStub } = makeSut();
-    validationStub.errorMessage = null;
+    validationStub.errorMessage = '';
     const error = new InvaildCredentialsError();
     jest.spyOn(authenticationSpy, 'auth').mockRejectedValueOnce(error);
     simulateValidSubmit(sut);
@@ -135,7 +135,7 @@ describe('Login Component', () => {
   test('Should call SaveAaccessToken on success', async () => {
     const { sut, validationStub, authenticationSpy, saveAccessTokenMock } =
       makeSut();
-    validationStub.errorMessage = null;
+    validationStub.errorMessage = '';
     simulateValidSubmit(sut);
     await sut.findByTestId('form');
     expect(saveAccessTokenMock.accessToken).toBe(
@@ -147,7 +147,7 @@ describe('Login Component', () => {
 
   test('Should present error if SaveAaccessToken fails', async () => {
     const { sut, validationStub, saveAccessTokenMock } = makeSut();
-    validationStub.errorMessage = null;
+    validationStub.errorMessage = '';
     const error = new InvaildCredentialsError();
     jest.spyOn(saveAccessTokenMock, 'save').mockRejectedValueOnce(error);
     simulateValidSubmit(sut);

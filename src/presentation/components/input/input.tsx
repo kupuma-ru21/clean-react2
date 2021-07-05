@@ -14,9 +14,14 @@ const Input: React.VFC<Props> = (props: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   return (
-    <div className={Styles.inputWrap}>
+    <div
+      className={Styles.inputWrap}
+      data-status={error ? 'invalid' : 'valid'}
+      data-testid={`${props.name}-wrap`}
+    >
       <input
         data-testid={props.name}
+        title={error}
         {...props}
         readOnly
         onFocus={(e) => {
@@ -29,19 +34,14 @@ const Input: React.VFC<Props> = (props: Props) => {
         ref={inputRef}
       />
       <label
+        data-testid={`${props.name}-label`}
         onClick={() => {
           inputRef.current.focus();
         }}
+        title={error}
       >
         {props.placeholder}
       </label>
-      <span
-        data-testid={`${props.name}-status`}
-        title={error || '認証に成功'}
-        className={Styles.status}
-      >
-        {error ? '🔴' : '🔵'}
-      </span>
     </div>
   );
 };

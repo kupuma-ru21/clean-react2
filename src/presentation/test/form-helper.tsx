@@ -16,11 +16,15 @@ export const testStatusForField = (
   fieldName: string,
   validationStub: ValidationStub
 ): void => {
-  const fieldStatus = sut.getByTestId(`${fieldName}-status`);
-  const { title, textContent } = fieldStatus;
+  const wrap = sut.getByTestId(`${fieldName}-wrap`);
+  const field = sut.getByTestId(fieldName);
+  const label = sut.getByTestId(`${fieldName}-label`);
   const { errorMessage } = validationStub;
-  expect(title).toBe(errorMessage || '認証に成功');
-  expect(textContent).toBe(errorMessage ? '🔴' : '🔵');
+  expect(wrap.getAttribute('data-status')).toBe(
+    errorMessage ? 'invalid' : 'valid'
+  );
+  expect(field.title).toBe(errorMessage);
+  expect(label.title).toBe(errorMessage);
 };
 
 export const populateField = (
