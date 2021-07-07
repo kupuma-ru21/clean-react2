@@ -97,4 +97,14 @@ describe('SignUp', () => {
 
     FormHelper.testUrl('/signup');
   });
+
+  it('Should present save accessToken if valid cledentials are provided', () => {
+    Http.mockOk();
+    simulateValidSubmit();
+
+    FormHelper.testUrl('/');
+    cy.window().then((window) =>
+      FormHelper.testLocalStorageItem('accessToken')
+    );
+  });
 });

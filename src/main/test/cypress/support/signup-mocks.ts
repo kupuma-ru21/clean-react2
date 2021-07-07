@@ -14,3 +14,9 @@ export const mockInvalidData = (): void => {
     invalid: faker.datatype.uuid(),
   });
 };
+
+export const mockOk = (): void => {
+  return Helper.mockOk(/signup/, 'POST', {
+    accessToken: faker.datatype.uuid(),
+  });
+};
