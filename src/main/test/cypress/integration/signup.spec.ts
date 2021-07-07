@@ -75,4 +75,15 @@ describe('SignUp', () => {
 
     FormHelper.testUrl('/signup');
   });
+
+  it('Should present UnExpectedError on default error cases', () => {
+    Http.mockUnexpectedError();
+
+    simulateValidSubmit();
+    FormHelper.testMainError(
+      'Algo de errado acounteceu. Tente novaente em breve.'
+    );
+
+    FormHelper.testUrl('/signup');
+  });
 });
