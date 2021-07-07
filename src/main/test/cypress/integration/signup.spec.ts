@@ -2,12 +2,15 @@ import faker from 'faker';
 import * as FormHelper from '../support/form-helper';
 import * as Http from '../support/signup-mocks';
 
-const simulateValidSubmit = (): void => {
+const populateFields = (): void => {
   cy.getByTestId('name').focus().type(faker.random.alphaNumeric(7));
   cy.getByTestId('email').focus().type(faker.internet.email());
   const password = faker.random.alphaNumeric(7);
   cy.getByTestId('password').focus().type(password);
   cy.getByTestId('passwordConfirmation').focus().type(password);
+};
+const simulateValidSubmit = (): void => {
+  populateFields();
   cy.getByTestId('submit').click();
 };
 
@@ -106,5 +109,12 @@ describe('SignUp', () => {
     cy.window().then((window) =>
       FormHelper.testLocalStorageItem('accessToken')
     );
+  });
+
+  it('Should prevent multiple submits', () => {
+    Http.mockOk();
+    populateFields();
+    cy.getByTestId('submit').dblclick();
+    FormHelper.testHttpCallsCount(1);
   });
 });
