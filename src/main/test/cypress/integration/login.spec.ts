@@ -23,7 +23,7 @@ describe('Login', () => {
     cy.getByTestId('error-wrap').should('not.have.descendants');
   });
 
-  it('Should present error if form is invalid', () => {
+  it('Should present error state if form is invalid', () => {
     cy.getByTestId('email').focus().type(faker.random.word());
     FormHelper.testInputStatus('email', '無効な値');
 
