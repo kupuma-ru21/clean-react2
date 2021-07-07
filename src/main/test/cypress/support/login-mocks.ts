@@ -1,5 +1,5 @@
 import faker from 'faker';
-import * as Helper from '../support/http-mock';
+import * as Helper from './http-mock';
 
 export const mockInvalidCredentialsError = (): void => {
   return Helper.mockInvalidCredentialsError(/login/);
