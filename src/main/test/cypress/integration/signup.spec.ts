@@ -86,4 +86,15 @@ describe('SignUp', () => {
 
     FormHelper.testUrl('/signup');
   });
+
+  it('Should present UnExpectedError if invalid data is returned', () => {
+    Http.mockInvalidData();
+    simulateValidSubmit();
+
+    FormHelper.testMainError(
+      'Algo de errado acounteceu. Tente novaente em breve.'
+    );
+
+    FormHelper.testUrl('/signup');
+  });
 });
