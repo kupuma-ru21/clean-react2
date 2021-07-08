@@ -1,6 +1,5 @@
 import { InvaildCredentialsError, UnexpectedError } from '@/domain/errors';
 import { mockAccountModel, mockAuthentication } from '@/domain/test';
-import { AuthenticationParams } from '@/domain/usecases';
 import { AccountModel } from '@/domain/models/';
 import { HttpStatusCode } from '@/data/procotols/http';
 import { HttpPostClientSpy } from '@/data/test';
@@ -9,14 +8,11 @@ import faker from 'faker';
 
 type SutType = {
   sut: RemoteAuthentication;
-  httpPostClientSpy: HttpPostClientSpy<AuthenticationParams, AccountModel>;
+  httpPostClientSpy: HttpPostClientSpy<AccountModel>;
 };
 
 const makeSut = (url: string = faker.internet.url()): SutType => {
-  const httpPostClientSpy = new HttpPostClientSpy<
-    AuthenticationParams,
-    AccountModel
-  >();
+  const httpPostClientSpy = new HttpPostClientSpy<AccountModel>();
   const sut = new RemoteAuthentication(url, httpPostClientSpy);
   return { sut, httpPostClientSpy };
 };

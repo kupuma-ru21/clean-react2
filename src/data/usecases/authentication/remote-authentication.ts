@@ -6,7 +6,7 @@ import { HttpPostClient, HttpStatusCode } from '@/data/procotols/http';
 export class RemoteAuthentication implements Authentication {
   constructor(
     readonly url: string,
-    readonly httpPostClient: HttpPostClient<AuthenticationParams, AccountModel>
+    readonly httpPostClient: HttpPostClient<AccountModel>
   ) {}
 
   async auth(params: AuthenticationParams): Promise<AccountModel> {

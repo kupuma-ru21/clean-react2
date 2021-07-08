@@ -6,7 +6,7 @@ import { HttpPostClient, HttpStatusCode } from '@/data/procotols/http';
 export class RemoteAddAccount implements AddAccount {
   constructor(
     readonly url: string,
-    readonly httpPostClient: HttpPostClient<AddAccountParams, AccountModel>
+    readonly httpPostClient: HttpPostClient<AccountModel>
   ) {}
 
   async add(params: AddAccountParams): Promise<AccountModel> {
