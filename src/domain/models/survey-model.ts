@@ -1,7 +1,9 @@
+type SurveyAnswerModel = { image?: string; answer: string };
+
 export type SurveyModel = {
   id: string;
   question: string;
-  answers: [{ image?: string; answer: string }];
+  answers: SurveyAnswerModel[];
   date: Date;
   didAnswer: boolean;
 };
