@@ -1,6 +1,6 @@
-export class EmainInUseError extends Error {
+export class EmailInUseError extends Error {
   constructor() {
     super('email error');
-    this.name = 'EmainInUseError';
+    this.name = 'EmailInUseError';
   }
 }

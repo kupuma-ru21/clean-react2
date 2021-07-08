@@ -15,7 +15,7 @@ import {
   SaveAccessTokenMock,
 } from '@/presentation/test';
 import SignUp from './signup';
-import { EmainInUseError } from '@/domain/errors';
+import { EmailInUseError } from '@/domain/errors';
 
 type SutTypes = {
   sut: RenderResult;
@@ -175,7 +175,7 @@ describe('SignUp Component', () => {
   test('Should present error if AddAccount fails', async () => {
     const { sut, addAccountSpy, validationStub } = makeSut();
     validationStub.errorMessage = '';
-    const error = new EmainInUseError();
+    const error = new EmailInUseError();
     jest.spyOn(addAccountSpy, 'add').mockRejectedValueOnce(error);
     simulateValidSubmit(sut);
     await Helper.testChildCount(sut, 'error-wrap', 1);
@@ -198,7 +198,7 @@ describe('SignUp Component', () => {
   test('Should present error if SaveAaccessToken fails', async () => {
     const { sut, validationStub, saveAccessTokenMock } = makeSut();
     validationStub.errorMessage = '';
-    const error = new EmainInUseError();
+    const error = new EmailInUseError();
     jest.spyOn(saveAccessTokenMock, 'save').mockRejectedValueOnce(error);
     simulateValidSubmit(sut);
     await Helper.testChildCount(sut, 'error-wrap', 1);
