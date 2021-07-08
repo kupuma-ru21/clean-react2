@@ -7,10 +7,10 @@ import {
 
 export class AxiosHttpClient implements HttpPostClient {
   async post(params: HttpPostParams): Promise<HttpResponse> {
-    let httpResponse: AxiosResponse;
+    let axiosResponse: AxiosResponse;
     try {
-      httpResponse = await axios.post(params.url, params.body);
-      return { statusCode: httpResponse.status, body: httpResponse.data };
+      axiosResponse = await axios.post(params.url, params.body);
+      return { statusCode: axiosResponse.status, body: axiosResponse.data };
     } catch (error) {
       return { statusCode: error.response.status, body: error.response.data };
     }
