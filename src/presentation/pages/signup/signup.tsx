@@ -15,12 +15,12 @@ import Styles from './signup-styles.scss';
 const SignUp: React.VFC<Props> = ({
   validation,
   addAccount,
-  saveAccessToken,
+  updateCurrentAccount,
 }: Props) => {
   const { state, setState, handleSubmit } = useSignup({
     validation,
     addAccount,
-    saveAccessToken,
+    updateCurrentAccount,
   });
 
   return (

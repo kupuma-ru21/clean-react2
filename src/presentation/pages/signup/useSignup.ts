@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { AddAccount, SaveAccessToken } from '@/domain/usecases';
+import { AddAccount, UpdateCurrentAccount } from '@/domain/usecases';
 import { Validation } from '@/presentation/procotols/validation';
 
 export type Props = {
   validation: Validation;
   addAccount: AddAccount;
-  saveAccessToken: SaveAccessToken;
+  updateCurrentAccount: UpdateCurrentAccount;
 };
 
 type State = {
@@ -30,7 +30,7 @@ type Return = { state: State; setState: SetState; handleSubmit: HandleSubmit };
 export const useSignup = ({
   validation,
   addAccount,
-  saveAccessToken,
+  updateCurrentAccount,
 }: Props): Return => {
   const [state, setState] = useState<State>({
     isLoading: false,
@@ -102,13 +102,13 @@ export const useSignup = ({
 
         const { name, email, password, passwordConfirmation } = state;
         setState((oldState) => ({ ...oldState, isLoading: true }));
-        const { accessToken } = await addAccount.add({
+        const account = await addAccount.add({
           name,
           email,
           password,
           passwordConfirmation,
         });
-        await saveAccessToken.save(accessToken);
+        await updateCurrentAccount.save(account);
         history.replace('/');
       } catch (error) {
         setState((oldState) => ({
@@ -118,7 +118,7 @@ export const useSignup = ({
         }));
       }
     },
-    [addAccount, history, saveAccessToken, state]
+    [addAccount, history, updateCurrentAccount, state]
   );
 
   return { state, setState, handleSubmit };

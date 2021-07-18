@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { Authentication, SaveAccessToken } from '@/domain/usecases';
+import { Authentication, UpdateCurrentAccount } from '@/domain/usecases';
 import {
   LoginHeader,
   Footer,
@@ -15,13 +15,13 @@ import Styles from './login-styles.scss';
 type Props = {
   validation: Validation;
   authentication: Authentication;
-  saveAccessToken: SaveAccessToken;
+  updateCurrentAccount: UpdateCurrentAccount;
 };
 
 const Login: React.VFC<Props> = ({
   validation,
   authentication,
-  saveAccessToken,
+  updateCurrentAccount,
 }: Props) => {
   const history = useHistory();
   const [state, setState] = useState({
@@ -71,8 +71,8 @@ const Login: React.VFC<Props> = ({
 
         setState((oldState) => ({ ...oldState, isLoading: true }));
         const { email, password } = state;
-        const { accessToken } = await authentication.auth({ email, password });
-        await saveAccessToken.save(accessToken);
+        const account = await authentication.auth({ email, password });
+        await updateCurrentAccount.save(account);
         history.replace('/');
       } catch (error) {
         setState((oldState) => ({
@@ -82,7 +82,7 @@ const Login: React.VFC<Props> = ({
         }));
       }
     },
-    [authentication, history, saveAccessToken, state]
+    [authentication, history, state, updateCurrentAccount]
   );
 
   return (

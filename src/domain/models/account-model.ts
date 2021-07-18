@@ -1,1 +1,1 @@
-export type AccountModel = { accessToken: string };
+export type AccountModel = { accessToken: string; name: string };

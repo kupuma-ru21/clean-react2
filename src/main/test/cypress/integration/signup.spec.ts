@@ -106,9 +106,7 @@ describe('SignUp', () => {
     simulateValidSubmit();
 
     FormHelper.testUrl('/');
-    cy.window().then((window) =>
-      FormHelper.testLocalStorageItem('accessToken')
-    );
+    cy.window().then((window) => FormHelper.testLocalStorageItem('account'));
   });
 
   it('Should prevent multiple submits', () => {
