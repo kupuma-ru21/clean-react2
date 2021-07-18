@@ -1,10 +1,10 @@
 import React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { makeLogin } from '@/main/factories/pages/login/login-factory';
+import { makeSignUp } from '@/main/factories/pages/signup/signup-factory';
 import { SurveyList } from '@/presentation/pages';
 
-type Factory = { makeLogin: React.VFC; makeSignUp: React.VFC };
-
-const Router: React.VFC<Factory> = ({ makeLogin, makeSignUp }: Factory) => {
+const Router: React.VFC = () => {
   return (
     <BrowserRouter>
       <Switch>

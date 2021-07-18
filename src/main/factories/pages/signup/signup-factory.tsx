@@ -4,7 +4,7 @@ import { makeLocalUpdateCurrentAccount } from '@/main/factories/usecases/update-
 import { makeSignUpValidation } from './signup-validation-factory';
 import { makeRemoteAddAccount } from '../../usecases/add-account/remote-add-account-factory';
 
-export const makeSignup: React.VFC = () => {
+export const makeSignUp: React.VFC = () => {
   return (
     <SignUp
       addAccount={makeRemoteAddAccount()}
