@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useContext } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { Authentication, UpdateCurrentAccount } from '@/domain/usecases';
+import { Authentication } from '@/domain/usecases';
 import {
   LoginHeader,
   Footer,
@@ -8,21 +8,14 @@ import {
   FormStatus,
   SubmitButton,
 } from '@/presentation/components';
-import Context from '@/presentation/context/form/form-context';
+import { FormContext, ApiContext } from '@/presentation/context';
 import { Validation } from '@/presentation/procotols/validation';
 import Styles from './login-styles.scss';
 
-type Props = {
-  validation: Validation;
-  authentication: Authentication;
-  updateCurrentAccount: UpdateCurrentAccount;
-};
+type Props = { validation: Validation; authentication: Authentication };
 
-const Login: React.VFC<Props> = ({
-  validation,
-  authentication,
-  updateCurrentAccount,
-}: Props) => {
+const Login: React.VFC<Props> = ({ validation, authentication }: Props) => {
+  const { setCurrentAccount } = useContext(ApiContext);
   const history = useHistory();
   const [state, setState] = useState({
     isLoading: false,
@@ -72,7 +65,7 @@ const Login: React.VFC<Props> = ({
         setState((oldState) => ({ ...oldState, isLoading: true }));
         const { email, password } = state;
         const account = await authentication.auth({ email, password });
-        await updateCurrentAccount.save(account);
+        setCurrentAccount(account);
         history.replace('/');
       } catch (error) {
         setState((oldState) => ({
@@ -82,13 +75,13 @@ const Login: React.VFC<Props> = ({
         }));
       }
     },
-    [authentication, history, state, updateCurrentAccount]
+    [authentication, history, setCurrentAccount, state]
   );
 
   return (
     <div className={Styles.loginWrap}>
       <LoginHeader />
-      <Context.Provider value={{ state, setState }}>
+      <FormContext.Provider value={{ state, setState }}>
         <form
           className={Styles.form}
           onSubmit={handleSubmit}
@@ -108,7 +101,7 @@ const Login: React.VFC<Props> = ({
           </Link>
           <FormStatus />
         </form>
-      </Context.Provider>
+      </FormContext.Provider>
       <Footer />
     </div>
   );

@@ -1,6 +1,6 @@
 import { SetStorage } from '@/data/procotols/cache/set-storage';
-import { LocalStorageAdaputer } from '@/infra/cahce/local-storage-adaputer';
+import { LocalStorageAdapter } from '@/infra/cahce/local-storage-adapter';
 
 export const makeLocalStorageAdapter = (): SetStorage => {
-  return new LocalStorageAdaputer();
+  return new LocalStorageAdapter();
 };

@@ -1,13 +1,10 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { AddAccount, UpdateCurrentAccount } from '@/domain/usecases';
+import { AddAccount } from '@/domain/usecases';
 import { Validation } from '@/presentation/procotols/validation';
+import { ApiContext } from '@/presentation/context';
 
-export type Props = {
-  validation: Validation;
-  addAccount: AddAccount;
-  updateCurrentAccount: UpdateCurrentAccount;
-};
+export type Props = { validation: Validation; addAccount: AddAccount };
 
 type State = {
   isLoading: boolean;
@@ -27,11 +24,7 @@ type SetState = React.Dispatch<React.SetStateAction<State>>;
 type HandleSubmit = (event: React.FormEvent<HTMLFormElement>) => Promise<void>;
 type Return = { state: State; setState: SetState; handleSubmit: HandleSubmit };
 
-export const useSignup = ({
-  validation,
-  addAccount,
-  updateCurrentAccount,
-}: Props): Return => {
+export const useSignup = ({ validation, addAccount }: Props): Return => {
   const [state, setState] = useState<State>({
     isLoading: false,
     isFormInvalid: true,
@@ -92,6 +85,7 @@ export const useSignup = ({
   ]);
 
   const history = useHistory();
+  const { setCurrentAccount } = useContext(ApiContext);
   const handleSubmit: HandleSubmit = useCallback(
     async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
       event.preventDefault();
@@ -108,7 +102,7 @@ export const useSignup = ({
           password,
           passwordConfirmation,
         });
-        await updateCurrentAccount.save(account);
+        setCurrentAccount(account);
         history.replace('/');
       } catch (error) {
         setState((oldState) => ({
@@ -118,7 +112,7 @@ export const useSignup = ({
         }));
       }
     },
-    [addAccount, history, updateCurrentAccount, state]
+    [addAccount, history, setCurrentAccount, state]
   );
 
   return { state, setState, handleSubmit };

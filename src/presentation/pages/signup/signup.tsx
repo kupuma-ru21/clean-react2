@@ -7,26 +7,21 @@ import {
   FormStatus,
   SubmitButton,
 } from '@/presentation/components';
-import Context from '@/presentation/context/form/form-context';
+import { FormContext } from '@/presentation/context';
 import { useSignup } from './useSignup';
 import type { Props } from './useSignup';
 import Styles from './signup-styles.scss';
 
-const SignUp: React.VFC<Props> = ({
-  validation,
-  addAccount,
-  updateCurrentAccount,
-}: Props) => {
+const SignUp: React.VFC<Props> = ({ validation, addAccount }: Props) => {
   const { state, setState, handleSubmit } = useSignup({
     validation,
     addAccount,
-    updateCurrentAccount,
   });
 
   return (
     <div className={Styles.signupWrap}>
       <LoginHeader />
-      <Context.Provider value={{ state, setState }}>
+      <FormContext.Provider value={{ state, setState }}>
         <form
           className={Styles.form}
           onSubmit={handleSubmit}
@@ -61,7 +56,7 @@ const SignUp: React.VFC<Props> = ({
           </Link>
           <FormStatus />
         </form>
-      </Context.Provider>
+      </FormContext.Provider>
       <Footer />
     </div>
   );
