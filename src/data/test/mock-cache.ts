@@ -1,4 +1,4 @@
-import { SetStorage } from '@/data/procotols/cache/set-storage';
+import { SetStorage } from '@/data/procotols/cache';
 
 export class SetStorageMock implements SetStorage {
   key: string;
