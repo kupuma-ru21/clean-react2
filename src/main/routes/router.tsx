@@ -8,6 +8,7 @@ import {
   getCurrentAccountAdapter,
   setCurrentAccountAdapter,
 } from '@/main/adapters/current-account-adapters';
+import { PrivateRoute } from '@/presentation/components';
 
 const Router: React.VFC = () => {
   return (
@@ -21,7 +22,7 @@ const Router: React.VFC = () => {
         <Switch>
           <Route path="/login" exact component={makeLogin} />
           <Route path="/signup" exact component={makeSignUp} />
-          <Route path="/" exact component={SurveyList} />
+          <PrivateRoute path="/" exact component={SurveyList} />
         </Switch>
       </BrowserRouter>
     </ApiContext.Provider>
