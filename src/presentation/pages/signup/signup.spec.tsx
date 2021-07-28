@@ -48,7 +48,7 @@ describe('SignUp Component', () => {
   test('Should start with initial state', async () => {
     const { validationStub } = makeSut();
     await Helper.testChildCount('error-wrap', 0);
-    Helper.testButtonDisabled('submit', true);
+    expect(screen.getByTestId('submit')).toBeDisabled();
     Helper.testStatusForField('name', validationStub);
     Helper.testStatusForField('email', validationStub);
     Helper.testStatusForField('password', validationStub);
@@ -118,14 +118,14 @@ describe('SignUp Component', () => {
     Helper.populateField('email');
     Helper.populateField('password');
     Helper.populateField('passwordConfirmation');
-    Helper.testButtonDisabled('submit', false);
+    expect(screen.getByTestId('submit')).toBeEnabled();
   });
 
   test('Should show spinner on submit', () => {
     const { validationStub } = makeSut();
     validationStub.errorMessage = '';
     simulateValidSubmit();
-    Helper.testElementExists('spinner');
+    expect(screen.queryByTestId('spinner')).toBeInTheDocument();
   });
 
   test('Should call AddAccount with correct values', () => {
@@ -165,7 +165,7 @@ describe('SignUp Component', () => {
     jest.spyOn(addAccountSpy, 'add').mockRejectedValueOnce(error);
     simulateValidSubmit();
     await Helper.testChildCount('error-wrap', 1);
-    Helper.testElementText('main-error', error.message);
+    expect(screen.getByTestId('main-error')).toHaveTextContent(error.message);
   });
 
   test('Should call UpdateCurrentAccount on success', async () => {
