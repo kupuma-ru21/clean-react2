@@ -1,18 +1,29 @@
 import React from 'react';
+import { SurveyModel } from '@/domain/models';
 import { Icon, IconName } from '@/presentation/components';
 import Styles from './survey-item-styles.scss';
 
-const SurveyItem: React.VFC = () => {
+type Props = { survey: SurveyModel };
+
+const SurveyItem: React.VFC<Props> = ({ survey }: Props) => {
   return (
     <li>
       <div className={Styles.surveyItemWrap}>
-        <Icon className={Styles.iconWrap} iconName={IconName.thumbDown} />
+        <Icon className={Styles.iconWrap} iconName={IconName.thumbUp} />
         <time>
-          <span className={Styles.day}>22</span>
-          <span className={Styles.month}>10</span>
-          <span className={Styles.year}>2020</span>
+          <span data-testid="day" className={Styles.day}>
+            {survey.date.getDate()}
+          </span>
+          <span data-testid="month" className={Styles.month}>
+            {survey.date
+              .toLocaleString('pt-BR', { month: 'short' })
+              .replace('.', '')}
+          </span>
+          <span data-testid="year" className={Styles.year}>
+            {survey.date.getFullYear()}
+          </span>
         </time>
-        <p>Qual e seu framework web favorite?</p>
+        <p data-testid="question">{survey.question}</p>
       </div>
       <footer>Ver Resulttado</footer>
     </li>
