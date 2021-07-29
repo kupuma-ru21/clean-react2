@@ -10,7 +10,7 @@ const SurveyItem: React.VFC<Props> = ({ survey }: Props) => {
 
   return (
     <li>
-      <div className={Styles.surveyItemWrap}>
+      <div className={Styles.surveyItemWrap} data-testid="surveyItemWrap">
         <Icon className={Styles.iconWrap} iconName={iconName} />
         <time>
           <span data-testid="day" className={Styles.day}>
