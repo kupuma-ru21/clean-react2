@@ -9,8 +9,8 @@ const SurveyItem: React.VFC<Props> = ({ survey }: Props) => {
   const iconName = survey.didAnswer ? IconName.thumbUp : IconName.thumbDown;
 
   return (
-    <li>
-      <div className={Styles.surveyItemWrap} data-testid="surveyItemWrap">
+    <li className={Styles.surveyItemWrap}>
+      <div>
         <Icon className={Styles.iconWrap} iconName={iconName} />
         <time>
           <span data-testid="day" className={Styles.day}>
