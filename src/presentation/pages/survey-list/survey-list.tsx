@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { SurveyModel } from '@/domain/models';
 import { LoadSurveyList } from '@/domain/usecases/load-survey-list';
 import { Footer, Header } from '@/presentation/components';
 import {
@@ -6,13 +7,13 @@ import {
   SurveyListItem,
   Error,
 } from '@/presentation/pages/survey-list/components';
+import type { SurveyListState } from '@/presentation/pages/survey-list/components/context/context';
 import Styles from './survey-list-styles.scss';
-import { SurveyModel } from '@/domain/models';
 
 type Props = { loadSurveyList: LoadSurveyList };
 
 const SurveyList: React.VFC<Props> = ({ loadSurveyList }: Props) => {
-  const [state, setState] = useState({
+  const [state, setState] = useState<SurveyListState>({
     surveys: [] as SurveyModel[],
     error: '',
     reload: false,
