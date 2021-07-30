@@ -10,6 +10,7 @@ import {
 } from '@/presentation/components';
 import { FormContext, ApiContext } from '@/presentation/context';
 import { Validation } from '@/presentation/procotols/validation';
+import type { LoginState } from '@/presentation/context/form/form-context';
 import Styles from './login-styles.scss';
 
 type Props = { validation: Validation; authentication: Authentication };
@@ -17,7 +18,7 @@ type Props = { validation: Validation; authentication: Authentication };
 const Login: React.VFC<Props> = ({ validation, authentication }: Props) => {
   const { setCurrentAccount } = useContext(ApiContext);
   const history = useHistory();
-  const [state, setState] = useState({
+  const [state, setState] = useState<LoginState>({
     isLoading: false,
     isFormInvalid: true,
     email: '',
