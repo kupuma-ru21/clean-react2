@@ -7,13 +7,12 @@ import {
   SurveyListItem,
   Error,
 } from '@/presentation/pages/survey-list/components';
-import type { SurveyListState } from '@/presentation/pages/survey-list/components/context/context';
 import Styles from './survey-list-styles.scss';
 
 type Props = { loadSurveyList: LoadSurveyList };
 
 const SurveyList: React.VFC<Props> = ({ loadSurveyList }: Props) => {
-  const [state, setState] = useState<SurveyListState>({
+  const [state, setState] = useState({
     surveys: [] as SurveyModel[],
     error: '',
     reload: false,
