@@ -15,6 +15,7 @@ const SurveyList: React.VFC<Props> = ({ loadSurveyList }: Props) => {
   const [state, setState] = useState({
     surveys: [] as SurveyModel[],
     error: '',
+    reload: false,
   });
 
   useEffect(() => {
@@ -30,7 +31,7 @@ const SurveyList: React.VFC<Props> = ({ loadSurveyList }: Props) => {
           return { ...oldState, error: error.message };
         })
       );
-  }, [loadSurveyList]);
+  }, [loadSurveyList, state.reload]);
 
   return (
     <div className={Styles.surveyListWrap}>
