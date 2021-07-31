@@ -1,6 +1,6 @@
 import React from 'react';
 import { LoadSurveyList } from '@/domain/usecases';
-import { Icon, IconName } from '@/presentation/components';
+import { IconName, Icon } from '@/presentation/components';
 import Styles from './item-styles.scss';
 
 type Props = { survey: LoadSurveyList.Model };
@@ -10,7 +10,7 @@ const SurveyItem: React.VFC<Props> = ({ survey }: Props) => {
 
   return (
     <li className={Styles.surveyItemWrap}>
-      <div>
+      <div className={Styles.surveyContent}>
         <Icon className={Styles.iconWrap} iconName={iconName} />
         <time>
           <span data-testid="day" className={Styles.day}>
