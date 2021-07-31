@@ -1,4 +1,4 @@
-import { UnexpectedError } from '@/domain/errors';
+import { AccessDeniedError, UnexpectedError } from '@/domain/errors';
 import { HttpGetClient, HttpStatusCode } from '@/data/procotols/http';
 import { LoadSurveyList } from '@/domain/usecases/load-survey-list';
 
@@ -18,6 +18,10 @@ export class RemoteLoadSurveyList implements LoadSurveyList {
             date: new Date(remoteSurvey.date),
           });
         });
+
+      case HttpStatusCode.forbidden:
+        throw new AccessDeniedError();
+
       case HttpStatusCode.noContent:
         return [];
 
