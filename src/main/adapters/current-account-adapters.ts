@@ -1,6 +1,6 @@
 import { UnexpectedError } from '@/domain/errors';
 import { AccountModel } from '@/domain/models';
-import { makeLocalStorageAdapter } from '@/main/factories/cache/local-storage-adapter';
+import { makeLocalStorageAdapter } from '@/main/factories/cache';
 
 export const setCurrentAccountAdapter = (account: AccountModel): void => {
   if (!account?.accessToken) {
