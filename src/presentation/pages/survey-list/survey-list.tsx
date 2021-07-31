@@ -1,6 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import { AccessDeniedError } from '@/domain/errors';
+import React, { useEffect, useState } from 'react';
 import { LoadSurveyList } from '@/domain/usecases/load-survey-list';
 import { Footer, Header } from '@/presentation/components';
 import {
@@ -8,14 +6,17 @@ import {
   SurveyListItem,
   Error,
 } from '@/presentation/pages/survey-list/components';
-import { ApiContext } from '@/presentation/context';
+import { useErrorHandler } from '@/presentation/hooks';
 import Styles from './survey-list-styles.scss';
 
 type Props = { loadSurveyList: LoadSurveyList };
 
 const SurveyList: React.VFC<Props> = ({ loadSurveyList }: Props) => {
-  const { setCurrentAccount } = useContext(ApiContext);
-  const history = useHistory();
+  const handleError = useErrorHandler((error: Error) => {
+    setState((oldState) => {
+      return { ...oldState, error: error.message };
+    });
+  });
   const [state, setState] = useState({
     surveys: [] as LoadSurveyList.Model[],
     error: '',
@@ -30,17 +31,9 @@ const SurveyList: React.VFC<Props> = ({ loadSurveyList }: Props) => {
           return { ...oldState, surveys };
         })
       )
-      .catch((error) => {
-        if (error instanceof AccessDeniedError) {
-          setCurrentAccount(undefined);
-          history.replace('/login');
-          return;
-        }
-        setState((oldState) => {
-          return { ...oldState, error: error.message };
-        });
-      });
-  }, [history, loadSurveyList, setCurrentAccount, state.reload]);
+      .catch(handleError);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.reload]);
 
   return (
     <div className={Styles.surveyListWrap}>
