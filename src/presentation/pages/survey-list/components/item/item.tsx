@@ -1,9 +1,9 @@
 import React from 'react';
-import { SurveyModel } from '@/domain/models';
+import { LoadSurveyList } from '@/domain/usecases';
 import { Icon, IconName } from '@/presentation/components';
 import Styles from './item-styles.scss';
 
-type Props = { survey: SurveyModel };
+type Props = { survey: LoadSurveyList.Model };
 
 const SurveyItem: React.VFC<Props> = ({ survey }: Props) => {
   const iconName = survey.didAnswer ? IconName.thumbUp : IconName.thumbDown;

@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { SurveyModel } from '@/domain/models';
+import { LoadSurveyList } from '@/domain/usecases';
 import {
   SurveyItemEmpty,
   SurveyItem,
@@ -13,7 +13,7 @@ const List: React.VFC = () => {
     <ul data-testid="survey-list" className={Styles.listWrap}>
       {!state.surveys.length && <SurveyItemEmpty />}
       {state.surveys.length &&
-        state.surveys.map((survey: SurveyModel) => {
+        state.surveys.map((survey: LoadSurveyList.Model) => {
           return <SurveyItem key={survey.id} survey={survey} />;
         })}
     </ul>

@@ -4,15 +4,16 @@ import { createMemoryHistory } from 'history';
 import { render, fireEvent, screen } from '@testing-library/react';
 import faker from 'faker';
 import { InvaildCredentialsError } from '@/domain/errors';
-import { AccountModel } from '@/domain/models';
-import { ValidationStub, AuthenticationSpy, Helper } from '@/presentation/test';
+import { Authentication } from '@/domain/usecases';
+import { AuthenticationSpy } from '@/domain/test';
+import { ValidationStub, Helper } from '@/presentation/test';
 import { Login } from '@/presentation/pages';
 import { ApiContext } from '@/presentation/context';
 
 type SutTypes = {
   validationStub: ValidationStub;
   authenticationSpy: AuthenticationSpy;
-  setCurrentAccountMock: (account: AccountModel) => void;
+  setCurrentAccountMock: (account: Authentication.Model) => void;
 };
 
 const history = createMemoryHistory({ initialEntries: ['/login'] });

@@ -3,16 +3,17 @@ import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import { screen, render, fireEvent } from '@testing-library/react';
 import faker from 'faker';
-import { AccountModel } from '@/domain/models';
 import { EmailInUseError } from '@/domain/errors';
-import { ValidationStub, Helper, AddAccountSpy } from '@/presentation/test';
+import { AddAccountSpy } from '@/domain/test';
+import { ValidationStub, Helper } from '@/presentation/test';
 import { ApiContext } from '@/presentation/context';
 import SignUp from './signup';
+import { AddAccount } from '@/domain/usecases';
 
 type SutTypes = {
   validationStub: ValidationStub;
   addAccountSpy: AddAccountSpy;
-  setCurrentAccountMock: (account: AccountModel) => void;
+  setCurrentAccountMock: (account: AddAccount.Model) => void;
 };
 
 const history = createMemoryHistory({ initialEntries: ['/signup'] });

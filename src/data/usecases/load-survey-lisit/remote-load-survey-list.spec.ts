@@ -1,6 +1,5 @@
 import faker from 'faker';
 import { UnexpectedError } from '@/domain/errors';
-import { SurveyModel } from '@/domain/models';
 import { mockSurveyListModel } from '@/domain/test';
 import { HttpGetClientSpy } from '@/data/test';
 import { HttpStatusCode } from '@/data/procotols/http';
@@ -8,11 +7,11 @@ import { RemoteLoadSurveyList } from './remote-load-survey-list';
 
 type SutTypes = {
   sut: RemoteLoadSurveyList;
-  httpGetClientSpy: HttpGetClientSpy<SurveyModel[]>;
+  httpGetClientSpy: HttpGetClientSpy<RemoteLoadSurveyList.Model[]>;
 };
 
 const makeSut = (url = faker.internet.url()): SutTypes => {
-  const httpGetClientSpy = new HttpGetClientSpy<SurveyModel[]>();
+  const httpGetClientSpy = new HttpGetClientSpy<RemoteLoadSurveyList.Model[]>();
   const sut = new RemoteLoadSurveyList(url, httpGetClientSpy);
   return { sut, httpGetClientSpy };
 };
