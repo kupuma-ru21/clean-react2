@@ -27,7 +27,6 @@ const SurveyList: React.VFC<Props> = ({ loadSurveyList }: Props) => {
       )
       .catch((error) =>
         setState((oldState) => {
-          console.log(error.message);
           return { ...oldState, error: error.message };
         })
       );
