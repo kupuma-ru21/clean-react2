@@ -17,4 +17,10 @@ describe('SurveyList', () => {
       'Algo de errado acounteceu. Tente novaente em breve.'
     );
   });
+
+  it('Should logout on AccessDeniedError', () => {
+    Http.mockAccessDeniedError();
+    cy.visit('');
+    Helper.testUrl('/login');
+  });
 });
