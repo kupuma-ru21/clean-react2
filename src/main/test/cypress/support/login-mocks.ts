@@ -1,23 +1,17 @@
 import faker from 'faker';
-import * as Helper from './http-mock';
+import * as Http from './http-mock';
 
 export const mockInvalidCredentialsError = (): void => {
-  return Helper.mockInvalidCredentialsError(/login/);
+  return Http.mockUnauthorizedError(/login/);
 };
 
 export const mockUnexpectedError = (): void => {
-  return Helper.mockUnexpectedError(/login/, 'POST');
+  return Http.mockServerError(/login/, 'POST');
 };
 
 export const mockOk = (): void => {
-  return Helper.mockOk(/login/, 'POST', {
+  return Http.mockOk(/login/, 'POST', {
     accessToken: faker.datatype.uuid(),
     name: faker.name.findName(),
-  });
-};
-
-export const mockInvalidData = (): void => {
-  return Helper.mockOk(/login/, 'POST', {
-    invalid: faker.datatype.uuid(),
   });
 };
