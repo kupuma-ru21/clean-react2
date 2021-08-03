@@ -1,11 +1,11 @@
 language: node_js
 node_js:
-  - 14
+  - 12
 script:
   - npm run lint:check
   - npm run test:coveralls
 deploy:
   provider: heroku
-  api_key: $HEROKU_API
+  api_key: $HEROKE_API
   app: fordevs--react
   skip_cleanup: true
