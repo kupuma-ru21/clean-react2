@@ -33,7 +33,7 @@ export namespace RemoteLoadSurveyResult {
       answer: string;
       count: number;
       percent: number;
-      inCurrentAccountAnswer: boolean;
+      isCurrentAccountAnswer: boolean;
     }>;
   };
 }
