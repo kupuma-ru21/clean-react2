@@ -1,6 +1,6 @@
 import React from 'react';
 import FlipMove from 'react-flip-move';
-import { Footer, Header, Loading } from '@/presentation/components';
+import { Calendar, Footer, Header, Loading } from '@/presentation/components';
 import Styles from './survey-result-styles.scss';
 
 const SurveyResult: React.VFC = () => {
@@ -8,7 +8,10 @@ const SurveyResult: React.VFC = () => {
     <div className={Styles.surveyResultWrap}>
       <Header />
       <div className={Styles.contentWrap}>
-        <h2>Qual e seu framework web favorite</h2>
+        <hgroup>
+          <Calendar date={new Date()} className={Styles.calendarWrap} />
+          <h2>Qual e seu framework web favorite</h2>
+        </hgroup>
         <FlipMove className={Styles.answerList}>
           <li>
             <img src="http://fordevs.herokuapp.com/static/img/logo-react.png" />
