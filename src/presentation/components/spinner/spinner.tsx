@@ -3,12 +3,12 @@ import Styles from './spinner-styles.scss';
 
 type Props = React.HTMLAttributes<HTMLSpanElement> & { isNegative?: boolean };
 
-const Spinner: React.VFC<Props> = (props: Props) => {
-  const negativeClass = props.isNegative ? Styles.negative : '';
+const Spinner: React.VFC<Props> = ({ isNegative, ...rest }: Props) => {
+  const negativeClass = isNegative ? Styles.negative : '';
   return (
     <div
-      {...props}
-      className={[Styles.spinner, negativeClass, props.className].join(' ')}
+      {...rest}
+      className={[Styles.spinner, negativeClass, rest.className].join(' ')}
       data-testid="spinner"
     >
       <div />
