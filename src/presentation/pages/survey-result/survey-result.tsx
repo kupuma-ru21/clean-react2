@@ -1,6 +1,6 @@
 import React from 'react';
 import FlipMove from 'react-flip-move';
-import { Footer, Header, Spinner } from '@/presentation/components';
+import { Footer, Header, Loading } from '@/presentation/components';
 import Styles from './survey-result-styles.scss';
 
 const SurveyResult: React.VFC = () => {
@@ -27,12 +27,7 @@ const SurveyResult: React.VFC = () => {
           </li>
         </FlipMove>
         <button>Volter</button>
-        <div className={Styles.loadingWrap}>
-          <div className={Styles.loading}>
-            <span>loading...</span>
-            <Spinner isNegative={true} />
-          </div>
-        </div>
+        {false && <Loading />}
       </div>
       <Footer />
     </div>
