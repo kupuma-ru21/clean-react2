@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { LoadSurveyList } from '@/domain/usecases/load-survey-list';
-import { Footer, Header } from '@/presentation/components';
+import { Error, Footer, Header } from '@/presentation/components';
 import {
   SurveyContext,
   SurveyListItem,
-  Error,
 } from '@/presentation/pages/survey-list/components';
 import { useErrorHandler } from '@/presentation/hooks';
 import Styles from './survey-list-styles.scss';
@@ -35,13 +34,19 @@ const SurveyList: React.VFC<Props> = ({ loadSurveyList }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.reload]);
 
+  const reload = useCallback(() => {
+    setState((oldState) => {
+      return { ...oldState, surveys: [], error: '', reload: !oldState.reload };
+    });
+  }, []);
+
   return (
     <div className={Styles.surveyListWrap}>
       <Header />
       <div className={Styles.contentWrap}>
         <h2>Enquetes</h2>
         <SurveyContext.Provider value={{ state, setState }}>
-          {state.error && <Error />}
+          {state.error && <Error error={state.error} reload={reload} />}
           {!state.error && <SurveyListItem />}
         </SurveyContext.Provider>
       </div>
