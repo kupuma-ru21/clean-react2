@@ -8,28 +8,33 @@ const SurveyResult: React.VFC = () => {
     <div className={Styles.surveyResultWrap}>
       <Header />
       <div className={Styles.contentWrap}>
-        <hgroup>
-          <Calendar date={new Date()} className={Styles.calendarWrap} />
-          <h2>Qual e seu framework web favorite</h2>
-        </hgroup>
-        <FlipMove className={Styles.answerList}>
-          <li>
-            <img src="http://fordevs.herokuapp.com/static/img/logo-react.png" />
-            <span className={Styles.answer}>React.js</span>
-            <span className={Styles.percent}>50%</span>
-          </li>
-          <li className={Styles.active}>
-            <img src="http://fordevs.herokuapp.com/static/img/logo-react.png" />
-            <span className={Styles.answer}>React.js</span>
-            <span className={Styles.percent}>50%</span>
-          </li>
-          <li>
-            <img src="http://fordevs.herokuapp.com/static/img/logo-react.png" />
-            <span className={Styles.answer}>React.js</span>
-            <span className={Styles.percent}>50%</span>
-          </li>
-        </FlipMove>
-        <button>Volter</button>
+        {false && (
+          <>
+            <hgroup>
+              <Calendar date={new Date()} className={Styles.calendarWrap} />
+              <h2>Qual e seu framework web favorite</h2>
+            </hgroup>
+            <FlipMove className={Styles.answerList}>
+              <li>
+                <img src="http://fordevs.herokuapp.com/static/img/logo-react.png" />
+                <span className={Styles.answer}>React.js</span>
+                <span className={Styles.percent}>50%</span>
+              </li>
+              <li className={Styles.active}>
+                <img src="http://fordevs.herokuapp.com/static/img/logo-react.png" />
+                <span className={Styles.answer}>React.js</span>
+                <span className={Styles.percent}>50%</span>
+              </li>
+              <li>
+                <img src="http://fordevs.herokuapp.com/static/img/logo-react.png" />
+                <span className={Styles.answer}>React.js</span>
+                <span className={Styles.percent}>50%</span>
+              </li>
+            </FlipMove>
+            <button>Volter</button>
+          </>
+        )}
+
         {false && <Loading />}
       </div>
       <Footer />
