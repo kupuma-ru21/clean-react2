@@ -10,6 +10,7 @@ import {
 } from '@/presentation/components';
 import { useErrorHandler } from '@/presentation/hooks';
 import Styles from './survey-result-styles.scss';
+import { useHistory } from 'react-router-dom';
 
 type Props = { loadSurveyResult: LoadSurveyResult };
 
@@ -42,6 +43,8 @@ const SurveyResult: React.VFC<Props> = ({ loadSurveyResult }: Props) => {
       };
     });
   }, []);
+
+  const { goBack } = useHistory();
 
   useEffect(() => {
     loadSurveyResult
@@ -96,7 +99,9 @@ const SurveyResult: React.VFC<Props> = ({ loadSurveyResult }: Props) => {
                 );
               })}
             </FlipMove>
-            <button>Volter</button>
+            <button data-testid="back-button" onClick={goBack}>
+              Volter
+            </button>
           </>
         )}
 
