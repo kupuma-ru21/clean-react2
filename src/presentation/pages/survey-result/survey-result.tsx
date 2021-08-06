@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import FlipMove from 'react-flip-move';
 import { LoadSurveyResult } from '@/domain/usecases';
 import {
@@ -14,16 +14,34 @@ import Styles from './survey-result-styles.scss';
 type Props = { loadSurveyResult: LoadSurveyResult };
 
 const SurveyResult: React.VFC<Props> = ({ loadSurveyResult }: Props) => {
-  const handleError = useErrorHandler((error: Error) => {
-    setState((oldState) => {
-      return { ...oldState, surveyResult: null, error: error.message };
-    });
-  });
   const [state, setState] = useState({
     isLoading: false,
     error: '',
     surveyResult: null as LoadSurveyResult.Model,
+    reload: false,
   });
+
+  const handleError = useErrorHandler((error: Error) => {
+    setState((oldState) => {
+      return {
+        ...oldState,
+        isLoading: false,
+        surveyResult: null,
+        error: error.message,
+      };
+    });
+  });
+
+  const reload = useCallback(() => {
+    setState((oldState) => {
+      return {
+        ...oldState,
+        surveyResult: null,
+        error: '',
+        reload: !oldState.reload,
+      };
+    });
+  }, []);
 
   useEffect(() => {
     loadSurveyResult
@@ -35,7 +53,7 @@ const SurveyResult: React.VFC<Props> = ({ loadSurveyResult }: Props) => {
       })
       .catch(handleError);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loadSurveyResult]);
+  }, [loadSurveyResult, state.reload]);
   return (
     <div className={Styles.surveyResultWrap}>
       <Header />
@@ -83,7 +101,7 @@ const SurveyResult: React.VFC<Props> = ({ loadSurveyResult }: Props) => {
         )}
 
         {state.isLoading && <Loading />}
-        {state.error && <Error error={state.error} reload={() => {}} />}
+        {state.error && <Error error={state.error} reload={reload} />}
       </div>
       <Footer />
     </div>
