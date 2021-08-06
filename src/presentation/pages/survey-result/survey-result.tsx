@@ -8,11 +8,17 @@ import {
   Header,
   Loading,
 } from '@/presentation/components';
+import { useErrorHandler } from '@/presentation/hooks';
 import Styles from './survey-result-styles.scss';
 
 type Props = { loadSurveyResult: LoadSurveyResult };
 
 const SurveyResult: React.VFC<Props> = ({ loadSurveyResult }: Props) => {
+  const handleError = useErrorHandler((error: Error) => {
+    setState((oldState) => {
+      return { ...oldState, surveyResult: null, error: error.message };
+    });
+  });
   const [state, setState] = useState({
     isLoading: false,
     error: '',
@@ -27,7 +33,8 @@ const SurveyResult: React.VFC<Props> = ({ loadSurveyResult }: Props) => {
           return { ...oldState, surveyResult };
         });
       })
-      .catch();
+      .catch(handleError);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loadSurveyResult]);
   return (
     <div className={Styles.surveyResultWrap}>
