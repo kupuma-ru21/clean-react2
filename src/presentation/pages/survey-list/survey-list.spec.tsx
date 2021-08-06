@@ -77,7 +77,7 @@ describe('SurveyList Component', () => {
     expect(history.location.pathname).toBe('/login');
   });
 
-  test('Should call LoadSurveyList on remove', async () => {
+  test('Should call LoadSurveyList on reload', async () => {
     const loadSurveyListSpy = new LoadSurveyListSpy();
     jest
       .spyOn(loadSurveyListSpy, 'loadAll')
