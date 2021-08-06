@@ -53,7 +53,6 @@ const SurveyResult: React.VFC<Props> = ({ loadSurveyResult }: Props) => {
       <Header />
       <div className={Styles.contentWrap} data-testid="survey-result">
         {state.surveyResult && <Result surveyResult={state.surveyResult} />}
-
         {state.isLoading && <Loading />}
         {state.error && <Error error={state.error} reload={reload} />}
       </div>

@@ -26,7 +26,11 @@ const Router: React.VFC = () => {
           <Route path="/login" exact component={makeLogin} />
           <Route path="/signup" exact component={makeSignUp} />
           <PrivateRoute path="/" exact component={makeSurveyList} />
-          <PrivateRoute path="/surveys:id" exact component={MakeSurveyResult} />
+          <PrivateRoute
+            path="/surveys/:id"
+            exact
+            component={MakeSurveyResult}
+          />
         </Switch>
       </BrowserRouter>
     </ApiContext.Provider>
