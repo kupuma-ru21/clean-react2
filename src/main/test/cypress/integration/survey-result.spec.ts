@@ -12,6 +12,10 @@ const mockSuccess = (): void => {
   return Http.mockOk(path, 'GET', 'fx:survey-result');
 };
 
+const mockAccessDeniedError = (): void => {
+  return Http.mockForbiddenError(path, 'GET');
+};
+
 describe('SurveyResult', () => {
   beforeEach(() => {
     cy.fixture('account').then((account) => {
@@ -42,5 +46,11 @@ describe('SurveyResult', () => {
     mockSuccess();
     cy.getByTestId('reload').click();
     cy.getByTestId('question').should('exist');
+  });
+
+  it('Should logout on AccessDeniedError', () => {
+    mockAccessDeniedError();
+    cy.visit('/surveys/any_id');
+    Helper.testUrl('/login');
   });
 });
