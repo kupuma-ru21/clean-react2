@@ -3,7 +3,7 @@ import { mockSaveSurveyResultParams } from '@/domain/test';
 import { HttpClientSpy, mockRemoteSurveyResultModel } from '@/data/test';
 import { HttpStatusCode } from '@/data/procotols/http';
 import { RemoteSaveSurveyResult } from './remote-save-survey-result';
-import { AccessDeniedError } from '@/domain/errors';
+import { AccessDeniedError, UnexpectedError } from '@/domain/errors';
 
 type SutTypes = {
   sut: RemoteSaveSurveyResult;
@@ -36,5 +36,19 @@ describe('RemoteSaveSurveyResult', () => {
     httpClientSpy.response = { statusCode: HttpStatusCode.forbidden };
     const promise = sut.save(mockSaveSurveyResultParams());
     await expect(promise).rejects.toThrow(new AccessDeniedError());
+  });
+
+  test('Should throw UnexpectedError if HttpGetClient returns 404', async () => {
+    const { sut, httpClientSpy } = makeSut();
+    httpClientSpy.response = { statusCode: HttpStatusCode.notFound };
+    const promise = sut.save(mockSaveSurveyResultParams());
+    await expect(promise).rejects.toThrow(new UnexpectedError());
+  });
+
+  test('Should throw UnexpectedError if HttpGetClient returns 500', async () => {
+    const { sut, httpClientSpy } = makeSut();
+    httpClientSpy.response = { statusCode: HttpStatusCode.serverError };
+    const promise = sut.save(mockSaveSurveyResultParams());
+    await expect(promise).rejects.toThrow(new UnexpectedError());
   });
 });
