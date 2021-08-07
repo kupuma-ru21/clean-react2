@@ -6,8 +6,11 @@ import {
   makeRemoteSaveSurveyResult,
 } from '@/main/factories/usecases';
 
+type Params = { id: string };
+
 export const MakeSurveyResult: React.VFC = () => {
-  const { id }: any = useParams();
+  const { id } = useParams<Params>();
+
   return (
     <SurveyResult
       loadSurveyResult={makeRemoteLoadSurveyResult(id)}
