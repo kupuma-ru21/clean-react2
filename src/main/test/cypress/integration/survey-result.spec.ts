@@ -90,6 +90,10 @@ describe('SurveyResult', () => {
       return Http.mockServerError(path, 'PUT');
     };
 
+    const mockAccessDeniedError = (): void => {
+      return Http.mockForbiddenError(path, 'PUT');
+    };
+
     beforeEach(() => {
       cy.fixture('account').then((account) => {
         Helper.setLocalStorageItem('account', account);
@@ -109,6 +113,12 @@ describe('SurveyResult', () => {
         'contain.text',
         'Algo de errado acounteceu. Tente novaente em breve.'
       );
+    });
+
+    it('Should logout on AccessDeniedError', () => {
+      mockAccessDeniedError();
+      cy.get('li:nth-child(2)').click();
+      Helper.testUrl('/login');
     });
   });
 });
