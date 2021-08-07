@@ -5,7 +5,7 @@ import * as Http from '../utils/http-mock';
 const path = /surveys/;
 
 const mockLoadSuccess = (): void => {
-  return Http.mockOk(path, 'GET', 'fx:survey-result');
+  return Http.mockOk(path, 'GET', 'fx:load-survey-result');
 };
 
 describe('SurveyResult', () => {
@@ -55,7 +55,7 @@ describe('SurveyResult', () => {
       Helper.testUrl('/login');
     });
 
-    it('Should present surveyResult', () => {
+    it('Should present survey result', () => {
       mockLoadSuccess();
       cy.visit('/surveys/any_id');
       cy.getByTestId('question').should('have.text', 'Question 1');
@@ -94,6 +94,10 @@ describe('SurveyResult', () => {
       return Http.mockForbiddenError(path, 'PUT');
     };
 
+    const mockSaveSuccess = (): void => {
+      return Http.mockOk(path, 'PUT', 'fx:save-survey-result');
+    };
+
     beforeEach(() => {
       cy.fixture('account').then((account) => {
         Helper.setLocalStorageItem('account', account);
@@ -119,6 +123,30 @@ describe('SurveyResult', () => {
       mockAccessDeniedError();
       cy.get('li:nth-child(2)').click();
       Helper.testUrl('/login');
+    });
+
+    it('Should present survey result', () => {
+      mockSaveSuccess();
+      cy.get('li:nth-child(2)').click();
+      cy.getByTestId('question').should('have.text', 'Other_Question');
+      cy.getByTestId('day').should('have.text', '23');
+      cy.getByTestId('month').should('have.text', 'mar');
+      cy.getByTestId('year').should('have.text', '2018');
+
+      cy.get('li:nth-child(1)').then((li) => {
+        assert.equal(li.find('[data-testid="answer"]').text(), 'other_answer');
+        assert.equal(li.find('[data-testid="percent"]').text(), '50%');
+        assert.equal(
+          li.find('[data-testid="image"]').attr('src'),
+          'other_image'
+        );
+      });
+
+      cy.get('li:nth-child(2)').then((li) => {
+        assert.equal(li.find('[data-testid="answer"]').text(), 'other_answer2');
+        assert.equal(li.find('[data-testid="percent"]').text(), '50%');
+        assert.notExists(li.find('[data-testid="image"]'));
+      });
     });
   });
 });
