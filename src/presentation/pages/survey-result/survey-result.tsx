@@ -1,13 +1,22 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { LoadSurveyResult } from '@/domain/usecases';
+import { LoadSurveyResult, SaveSurveyResult } from '@/domain/usecases';
 import { Error, Footer, Header, Loading } from '@/presentation/components';
 import { useErrorHandler } from '@/presentation/hooks';
-import { Result } from '@/presentation/pages/survey-result/component';
+import {
+  Result,
+  SurveyResultContext,
+} from '@/presentation/pages/survey-result/component';
 import Styles from './survey-result-styles.scss';
 
-type Props = { loadSurveyResult: LoadSurveyResult };
+type Props = {
+  loadSurveyResult: LoadSurveyResult;
+  saveSurveyResult: SaveSurveyResult;
+};
 
-const SurveyResult: React.VFC<Props> = ({ loadSurveyResult }: Props) => {
+const SurveyResult: React.VFC<Props> = ({
+  loadSurveyResult,
+  saveSurveyResult,
+}: Props) => {
   const [state, setState] = useState({
     isLoading: false,
     error: '',
@@ -37,6 +46,16 @@ const SurveyResult: React.VFC<Props> = ({ loadSurveyResult }: Props) => {
     });
   }, []);
 
+  const onAnswer = useCallback(
+    (answer: string): void => {
+      setState((oldState) => {
+        return { ...oldState, isLoading: true };
+      });
+      saveSurveyResult.save({ answer }).then().catch();
+    },
+    [saveSurveyResult]
+  );
+
   useEffect(() => {
     loadSurveyResult
       .load()
@@ -48,14 +67,18 @@ const SurveyResult: React.VFC<Props> = ({ loadSurveyResult }: Props) => {
       .catch(handleError);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loadSurveyResult, state.reload]);
+
   return (
     <div className={Styles.surveyResultWrap}>
       <Header />
-      <div className={Styles.contentWrap} data-testid="survey-result">
-        {state.surveyResult && <Result surveyResult={state.surveyResult} />}
-        {state.isLoading && <Loading />}
-        {state.error && <Error error={state.error} reload={reload} />}
-      </div>
+      <SurveyResultContext.Provider value={{ onAnswer }}>
+        <div className={Styles.contentWrap} data-testid="survey-result">
+          {state.surveyResult && <Result surveyResult={state.surveyResult} />}
+          {state.isLoading && <Loading />}
+          {state.error && <Error error={state.error} reload={reload} />}
+        </div>
+      </SurveyResultContext.Provider>
+
       <Footer />
     </div>
   );
