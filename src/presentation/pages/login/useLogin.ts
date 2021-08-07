@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import { currentAccountState } from '@/presentation/components';
 import { Validation } from '@/presentation/procotols/validation';
 import { loginState } from '@/presentation/pages/login/components';
@@ -13,7 +13,12 @@ type Return = {
 };
 
 export const useLogin = ({ validation, authentication }: Props): Return => {
+  const resetLoginState = useResetRecoilState(loginState);
   const [state, setState] = useRecoilState(loginState);
+
+  useEffect(() => {
+    resetLoginState();
+  }, [resetLoginState]);
 
   useEffect(() => {
     setState((oldState) => {
