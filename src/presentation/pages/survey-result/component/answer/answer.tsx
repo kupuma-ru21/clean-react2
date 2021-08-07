@@ -1,13 +1,14 @@
-import React, { useCallback, useContext } from 'react';
+import React, { useCallback } from 'react';
+import { useRecoilValue } from 'recoil';
 import { SurveyResultAnswerModel } from '@/domain/models';
-import { SurveyResultContext } from '@/presentation/pages/survey-result/component';
+import { onSurveyAnswerState } from '@/presentation/pages/survey-result/component';
 import Styles from './answer-styles.scss';
 
 type Props = { answer: SurveyResultAnswerModel };
 
 const Answer: React.VFC<Props> = ({ answer }: Props) => {
   const activeClassName = answer.isCurrentAccountAnswer ? Styles.active : '';
-  const { onAnswer } = useContext(SurveyResultContext);
+  const { onAnswer } = useRecoilValue(onSurveyAnswerState);
 
   const answerClick = useCallback(
     (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
