@@ -1,6 +1,7 @@
 import { AccessDeniedError, UnexpectedError } from '@/domain/errors';
 import { HttpClient, HttpStatusCode } from '@/data/procotols/http';
 import { LoadSurveyResult } from '@/domain/usecases';
+import { RemoteSurveyResultModel } from '@/data/models';
 
 export class RemoteLoadSurveyResult implements LoadSurveyResult {
   constructor(
@@ -28,15 +29,5 @@ export class RemoteLoadSurveyResult implements LoadSurveyResult {
 }
 
 export namespace RemoteLoadSurveyResult {
-  export type Model = {
-    question: string;
-    date: string;
-    answers: Array<{
-      image?: string;
-      answer: string;
-      count: number;
-      percent: number;
-      isCurrentAccountAnswer: boolean;
-    }>;
-  };
+  export type Model = RemoteSurveyResultModel;
 }
