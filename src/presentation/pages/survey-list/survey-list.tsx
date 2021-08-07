@@ -1,7 +1,11 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
+import { useRecoilState } from 'recoil';
 import { LoadSurveyList } from '@/domain/usecases/load-survey-list';
 import { Error, Footer, Header } from '@/presentation/components';
-import { SurveyListItem } from '@/presentation/pages/survey-list/components';
+import {
+  SurveyListItem,
+  surveyListState,
+} from '@/presentation/pages/survey-list/components';
 import { useErrorHandler } from '@/presentation/hooks';
 import Styles from './survey-list-styles.scss';
 
@@ -13,11 +17,7 @@ const SurveyList: React.VFC<Props> = ({ loadSurveyList }: Props) => {
       return { ...oldState, error: error.message };
     });
   });
-  const [state, setState] = useState({
-    surveys: [] as LoadSurveyList.Model[],
-    error: '',
-    reload: false,
-  });
+  const [state, setState] = useRecoilState(surveyListState);
 
   useEffect(() => {
     loadSurveyList
@@ -35,7 +35,7 @@ const SurveyList: React.VFC<Props> = ({ loadSurveyList }: Props) => {
     setState((oldState) => {
       return { ...oldState, surveys: [], error: '', reload: !oldState.reload };
     });
-  }, []);
+  }, [setState]);
 
   return (
     <div className={Styles.surveyListWrap}>
