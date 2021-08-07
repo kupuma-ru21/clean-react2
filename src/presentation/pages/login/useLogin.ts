@@ -1,8 +1,8 @@
-import { useCallback, useContext, useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { currentAccountState } from '@/presentation/components';
 import { Validation } from '@/presentation/procotols/validation';
-import { ApiContext } from '@/presentation/context';
 import { loginState } from '@/presentation/pages/login/components';
 import { Authentication } from '@/domain/usecases';
 
@@ -44,7 +44,7 @@ export const useLogin = ({ validation, authentication }: Props): Return => {
     });
   }, [setState, state.emailError, state.passwordError]);
 
-  const { setCurrentAccount } = useContext(ApiContext);
+  const { setCurrentAccount } = useRecoilValue(currentAccountState);
   const history = useHistory();
   const handleSubmit = useCallback(
     async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {

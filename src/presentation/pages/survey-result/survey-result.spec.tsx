@@ -12,7 +12,7 @@ import { AccountModel } from '@/domain/models';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory, MemoryHistory } from 'history';
 import { SurveyResult } from '@/presentation/pages';
-import { ApiContext } from '@/presentation/context';
+import { currentAccountState } from '@/presentation/components';
 
 type SutTypes = {
   loadSurveyResultSpy: LoadSurveyResultSpy;
@@ -35,21 +35,22 @@ const makeSut = ({
     initialIndex: 1,
   });
   const setCurrentAccountMock = jest.fn();
+  const mockedState = {
+    setCurrentAccount: setCurrentAccountMock,
+    getCurrentAccount: () => mockAccountModel(),
+  };
   render(
-    <RecoilRoot>
-      <ApiContext.Provider
-        value={{
-          setCurrentAccount: setCurrentAccountMock,
-          getCurrentAccount: () => mockAccountModel(),
-        }}
-      >
-        <Router history={history}>
-          <SurveyResult
-            loadSurveyResult={loadSurveyResultSpy}
-            saveSurveyResult={saveSurveyResultSpy}
-          />
-        </Router>
-      </ApiContext.Provider>
+    <RecoilRoot
+      initializeState={({ set }) => {
+        return set(currentAccountState, mockedState);
+      }}
+    >
+      <Router history={history}>
+        <SurveyResult
+          loadSurveyResult={loadSurveyResultSpy}
+          saveSurveyResult={saveSurveyResultSpy}
+        />
+      </Router>
     </RecoilRoot>
   );
 
