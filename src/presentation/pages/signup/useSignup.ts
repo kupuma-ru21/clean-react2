@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import { currentAccountState } from '@/presentation/components';
 import { AddAccount } from '@/domain/usecases';
 import { Validation } from '@/presentation/procotols/validation';
@@ -12,6 +12,11 @@ type HandleSubmit = (event: React.FormEvent<HTMLFormElement>) => Promise<void>;
 type Return = { handleSubmit: HandleSubmit };
 
 export const useSignup = ({ validation, addAccount }: Props): Return => {
+  const resetSignUpState = useResetRecoilState(signUpState);
+  useEffect(() => {
+    resetSignUpState();
+  }, [resetSignUpState]);
+
   const [state, setState] = useRecoilState(signUpState);
 
   const validate = useCallback(
