@@ -51,9 +51,9 @@ const SurveyResult: React.VFC<Props> = ({
       setState((oldState) => {
         return { ...oldState, isLoading: true };
       });
-      saveSurveyResult.save({ answer }).then().catch();
+      saveSurveyResult.save({ answer }).then().catch(handleError);
     },
-    [saveSurveyResult]
+    [handleError, saveSurveyResult]
   );
 
   useEffect(() => {
