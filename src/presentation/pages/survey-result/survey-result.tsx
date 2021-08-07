@@ -48,6 +48,7 @@ const SurveyResult: React.VFC<Props> = ({
 
   const onAnswer = useCallback(
     (answer: string): void => {
+      if (state.isLoading) return;
       setState((oldState) => {
         return { ...oldState, isLoading: true };
       });
@@ -60,7 +61,7 @@ const SurveyResult: React.VFC<Props> = ({
         })
         .catch(handleError);
     },
-    [handleError, saveSurveyResult]
+    [handleError, saveSurveyResult, state.isLoading]
   );
 
   useEffect(() => {
