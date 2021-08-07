@@ -1,5 +1,6 @@
 import React from 'react';
 import { Router } from 'react-router-dom';
+import { RecoilRoot } from 'recoil';
 import { createMemoryHistory } from 'history';
 import { screen, render, fireEvent } from '@testing-library/react';
 import faker from 'faker';
@@ -23,11 +24,13 @@ const makeSut = (): SutTypes => {
   const validationStub = new ValidationStub();
   validationStub.errorMessage = faker.random.words();
   render(
-    <ApiContext.Provider value={{ setCurrentAccount: setCurrentAccountMock }}>
-      <Router history={history}>
-        <SignUp addAccount={addAccountSpy} validation={validationStub} />
-      </Router>
-    </ApiContext.Provider>
+    <RecoilRoot>
+      <ApiContext.Provider value={{ setCurrentAccount: setCurrentAccountMock }}>
+        <Router history={history}>
+          <SignUp addAccount={addAccountSpy} validation={validationStub} />
+        </Router>
+      </ApiContext.Provider>
+    </RecoilRoot>
   );
   return { validationStub, addAccountSpy, setCurrentAccountMock };
 };

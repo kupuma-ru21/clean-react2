@@ -1,38 +1,19 @@
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
 import { Validation } from '@/presentation/procotols/validation';
 import { ApiContext } from '@/presentation/context';
+import { loginState } from '@/presentation/pages/login/components';
 import { Authentication } from '@/domain/usecases';
 
 type Props = { validation: Validation; authentication: Authentication };
 
-type State = {
-  isLoading: boolean;
-  isFormInvalid: boolean;
-  email: string;
-  password: string;
-  emailError: string;
-  passwordError: string;
-  mainError: string;
-};
-type SetState = React.Dispatch<React.SetStateAction<State>>;
-
 type Return = {
-  state: State;
-  setState: SetState;
   handleSubmit: (event: React.FormEvent<HTMLFormElement>) => Promise<void>;
 };
 
 export const useLogin = ({ validation, authentication }: Props): Return => {
-  const [state, setState] = useState({
-    isLoading: false,
-    isFormInvalid: true,
-    email: '',
-    password: '',
-    emailError: '',
-    passwordError: '必須項目です',
-    mainError: '',
-  });
+  const [state, setState] = useRecoilState(loginState);
 
   useEffect(() => {
     setState((oldState) => {
@@ -41,7 +22,7 @@ export const useLogin = ({ validation, authentication }: Props): Return => {
         emailError: validation.validate('email', { email: state.email }),
       };
     });
-  }, [state.email, validation]);
+  }, [setState, state.email, validation]);
 
   useEffect(() => {
     setState((oldState) => {
@@ -52,7 +33,7 @@ export const useLogin = ({ validation, authentication }: Props): Return => {
         }),
       };
     });
-  }, [state.password, validation]);
+  }, [setState, state.password, validation]);
 
   useEffect(() => {
     setState((oldState) => {
@@ -61,7 +42,7 @@ export const useLogin = ({ validation, authentication }: Props): Return => {
         isFormInvalid: !!state.emailError || !!state.passwordError,
       };
     });
-  }, [state.emailError, state.passwordError]);
+  }, [setState, state.emailError, state.passwordError]);
 
   const { setCurrentAccount } = useContext(ApiContext);
   const history = useHistory();
@@ -85,8 +66,8 @@ export const useLogin = ({ validation, authentication }: Props): Return => {
         }));
       }
     },
-    [authentication, history, setCurrentAccount, state]
+    [authentication, history, setCurrentAccount, setState, state]
   );
 
-  return { state, setState, handleSubmit };
+  return { handleSubmit };
 };

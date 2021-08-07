@@ -1,15 +1,15 @@
-import React, { useContext, useRef } from 'react';
+import React, { useRef } from 'react';
 import Styles from './input-styles.scss';
-import { FormContext } from '@/presentation/context';
 
-type Props = React.DetailedHTMLProps<
+type InputProps = React.DetailedHTMLProps<
   React.InputHTMLAttributes<HTMLInputElement>,
   HTMLInputElement
 >;
 
-const Input: React.VFC<Props> = (props: Props) => {
-  const { state, setState } = useContext(FormContext);
-  const error = state[`${props.name}Error`];
+type Props = InputProps & { state: any; setState: any };
+
+const Input: React.VFC<Props> = ({ state, setState, ...rest }: Props) => {
+  const error = state[`${rest.name}Error`];
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -17,12 +17,12 @@ const Input: React.VFC<Props> = (props: Props) => {
     <div
       className={Styles.inputWrap}
       data-status={error ? 'invalid' : 'valid'}
-      data-testid={`${props.name}-wrap`}
+      data-testid={`${rest.name}-wrap`}
     >
       <input
-        data-testid={props.name}
+        data-testid={rest.name}
         title={error}
-        {...props}
+        {...rest}
         readOnly
         onFocus={(e) => {
           e.target.readOnly = false;
@@ -34,13 +34,13 @@ const Input: React.VFC<Props> = (props: Props) => {
         ref={inputRef}
       />
       <label
-        data-testid={`${props.name}-label`}
+        data-testid={`${rest.name}-label`}
         onClick={() => {
           inputRef.current.focus();
         }}
         title={error}
       >
-        {props.placeholder}
+        {rest.placeholder}
       </label>
     </div>
   );

@@ -1,43 +1,18 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
 import { AddAccount } from '@/domain/usecases';
 import { Validation } from '@/presentation/procotols/validation';
 import { ApiContext } from '@/presentation/context';
+import { signUpState } from './components';
 
 export type Props = { validation: Validation; addAccount: AddAccount };
 
-type State = {
-  isLoading: boolean;
-  isFormInvalid: boolean;
-  name: string;
-  email: string;
-  password: string;
-  passwordConfirmation: string;
-  nameError: string;
-  emailError: string;
-  passwordError: string;
-  passwordConfirmationError: string;
-  mainError: string;
-};
-
-type SetState = React.Dispatch<React.SetStateAction<State>>;
 type HandleSubmit = (event: React.FormEvent<HTMLFormElement>) => Promise<void>;
-type Return = { state: State; setState: SetState; handleSubmit: HandleSubmit };
+type Return = { handleSubmit: HandleSubmit };
 
 export const useSignup = ({ validation, addAccount }: Props): Return => {
-  const [state, setState] = useState<State>({
-    isLoading: false,
-    isFormInvalid: true,
-    name: '',
-    email: '',
-    password: '',
-    passwordConfirmation: '',
-    nameError: '',
-    emailError: '',
-    passwordError: '',
-    passwordConfirmationError: '',
-    mainError: '',
-  });
+  const [state, setState] = useRecoilState(signUpState);
 
   const validate = useCallback(
     (field: string): void => {
@@ -48,7 +23,7 @@ export const useSignup = ({ validation, addAccount }: Props): Return => {
         [`${field}Error`]: validation.validate(field, formdata),
       }));
     },
-    [state, validation]
+    [setState, state, validation]
   );
   useEffect(() => {
     validate('name');
@@ -78,6 +53,7 @@ export const useSignup = ({ validation, addAccount }: Props): Return => {
       };
     });
   }, [
+    setState,
     state.emailError,
     state.nameError,
     state.passwordConfirmationError,
@@ -112,8 +88,8 @@ export const useSignup = ({ validation, addAccount }: Props): Return => {
         }));
       }
     },
-    [addAccount, history, setCurrentAccount, state]
+    [addAccount, history, setCurrentAccount, setState, state]
   );
 
-  return { state, setState, handleSubmit };
+  return { handleSubmit };
 };
