@@ -1,6 +1,6 @@
 import React from 'react';
 import { Router } from 'react-router-dom';
-import { RecoilRoot } from 'recoil';
+import { MutableSnapshot, RecoilRoot, RecoilState } from 'recoil';
 import { MemoryHistory } from 'history';
 import { render } from '@testing-library/react';
 import { mockAccountModel } from '@/domain/test';
@@ -11,6 +11,7 @@ type Params = {
   Page: React.VFC;
   history: MemoryHistory;
   account?: AccountModel;
+  states?: Array<{ atom: RecoilState<any>; value: any }>;
 };
 
 type Result = {
@@ -21,6 +22,7 @@ export const renderWithHistory = ({
   Page,
   history,
   account = mockAccountModel(),
+  states = [],
 }: Params): Result => {
   const setCurrentAccountMock = jest.fn();
   const mockedState = {
@@ -28,12 +30,16 @@ export const renderWithHistory = ({
     getCurrentAccount: () => account,
   };
 
+  const initializeState = ({ set }: MutableSnapshot): void => {
+    [...states, { atom: currentAccountState, value: mockedState }].forEach(
+      (state) => {
+        return set(state.atom, state.value);
+      }
+    );
+  };
+
   render(
-    <RecoilRoot
-      initializeState={({ set }) => {
-        return set(currentAccountState, mockedState);
-      }}
-    >
+    <RecoilRoot initializeState={initializeState}>
       <Router history={history}>
         <Page />
       </Router>
